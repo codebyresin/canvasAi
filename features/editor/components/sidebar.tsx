@@ -16,7 +16,7 @@ interface SidebarProps {
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
-
+//侧边栏配置项
 const SIDEITEMOPTION = [
   {
     icon: LayoutTemplate,
