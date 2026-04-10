@@ -1,5 +1,5 @@
 import { fabric } from "fabric";
-import { useCallback, useState, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAutoResize } from "./useAutoResize";
 import {
   BuildEditorProps,
@@ -33,19 +33,17 @@ const buildEditor = ({
   strokeWidth,
   setStrokeWidth,
 }: BuildEditorProps): Editor => {
-  // console.log("canvas", canvas);
-  // console.log("canvasObject", canvas.getObjects()); //工作区
-  // console.log("canvasActiveObject", canvas.getActiveObject());
-
   const getWorkspace = () => {
     return canvas.getObjects().find((object) => object.name === WORKSPACE_NAME);
   };
+
   const center = (obj: fabric.Object) => {
     const workspace = getWorkspace();
     const center = workspace?.getCenterPoint();
-    //@ts-ignore
-    canvas._centerObject(obj, center); //基于画布内部的居中方法
+    // @ts-expect-error fabric internal helper is not typed
+    canvas._centerObject(obj, center);
   };
+
   const addToCanvas = (object: fabric.Object) => {
     center(object);
     canvas.add(object);
@@ -63,7 +61,6 @@ const buildEditor = ({
     changeStrokeColor: (value: string) => {
       setStrokeColor(value);
       canvas.getActiveObjects().forEach((object) => {
-        // Text types don't have stroke
         if (isTextType(object.type)) {
           object.set({ fill: value });
         }
@@ -80,8 +77,6 @@ const buildEditor = ({
       canvas.freeDrawingBrush.width = value;
       canvas.renderAll();
     },
-
-    //!插入图形
     addCircle: () => {
       const obj = new fabric.Circle({
         ...CIRCLE_OPTIONS,
@@ -110,13 +105,13 @@ const buildEditor = ({
       addToCanvas(object);
     },
     addInverseTriangle: () => {
-      const HEIGHT = TRIANGLE_OPTIONS.height;
-      const WIDTH = TRIANGLE_OPTIONS.width;
+      const height = TRIANGLE_OPTIONS.height;
+      const width = TRIANGLE_OPTIONS.width;
       const object = new fabric.Polygon(
         [
           { x: 0, y: 0 },
-          { x: WIDTH, y: 0 },
-          { x: WIDTH / 2, y: HEIGHT },
+          { x: width, y: 0 },
+          { x: width / 2, y: height },
         ],
         {
           ...TRIANGLE_OPTIONS,
@@ -126,15 +121,15 @@ const buildEditor = ({
       addToCanvas(object);
     },
     addDiamond: () => {
-      const HEIGHT = DIAMOND_OPTIONS.height;
-      const WIDTH = DIAMOND_OPTIONS.width;
+      const height = DIAMOND_OPTIONS.height;
+      const width = DIAMOND_OPTIONS.width;
 
       const object = new fabric.Polygon(
         [
-          { x: WIDTH / 2, y: 0 },
-          { x: WIDTH, y: HEIGHT / 2 },
-          { x: WIDTH / 2, y: HEIGHT },
-          { x: 0, y: HEIGHT / 2 },
+          { x: width / 2, y: 0 },
+          { x: width, y: height / 2 },
+          { x: width / 2, y: height },
+          { x: 0, y: height / 2 },
         ],
         {
           ...DIAMOND_OPTIONS,
@@ -157,29 +152,40 @@ export const useEditor = () => {
   const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
 
-  //?自定义钩子
   useCanvasEvents({ canvas, setSelectedObjects });
-  //?监听canvas
   useAutoResize({
     canvas,
     container,
   });
 
-  const editor = useMemo(() => {
-    if (canvas)
-      return buildEditor({
-        canvas,
-        fillColor,
-        strokeWidth,
-        strokeColor,
-        setFillColor,
-        setStrokeColor,
-        setStrokeWidth,
-      });
-    return undefined;
-  }, [canvas]);
+  useEffect(() => {
+    const activeObject = selectedObjects[0];
 
-  //初始化
+    if (!activeObject) {
+      setFillColor(FILL_COLOR);
+      return;
+    }
+
+    const nextFill = activeObject.get("fill");
+    if (typeof nextFill === "string") {
+      setFillColor(nextFill);
+    }
+  }, [selectedObjects]);
+
+  const editor = useMemo(() => {
+    if (!canvas) return undefined;
+
+    return buildEditor({
+      canvas,
+      fillColor,
+      strokeWidth,
+      strokeColor,
+      setFillColor,
+      setStrokeColor,
+      setStrokeWidth,
+    });
+  }, [canvas, fillColor, strokeColor, strokeWidth]);
+
   const init = useCallback(
     ({
       initialCanvas,

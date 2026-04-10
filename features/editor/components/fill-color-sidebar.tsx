@@ -15,15 +15,14 @@ export const FillColorSidebar = ({
   activeTool,
   onChangeActiveTool,
 }: FillColorSidebarProps) => {
-  console.log(editor);
-
-  let value = editor?.fillColor || FILL_COLOR;
-  console.log(value);
+  const value = editor?.fillColor || FILL_COLOR;
 
   const onClose = () => {
     onChangeActiveTool("select");
   };
   const onChange = (value: string) => {
+    console.log(value);
+
     editor?.changeFillColor(value);
   };
   return (
