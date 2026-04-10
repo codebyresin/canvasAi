@@ -1,4 +1,4 @@
-import  { fabric } from "fabric";
+import { fabric } from "fabric";
 import { useCallback, useEffect, useRef } from "react";
 
 interface UseAutoResizeProps {
@@ -42,7 +42,8 @@ export const useAutoResize = ({ canvas, container }: UseAutoResizeProps) => {
     if (!viewportTransform) return;
 
     viewportTransform[4] = width / 2 - workspaceCenter.x * viewportTransform[0];
-    viewportTransform[5] = height / 2 - workspaceCenter.y * viewportTransform[3];
+    viewportTransform[5] =
+      height / 2 - workspaceCenter.y * viewportTransform[3];
     canvas.setViewportTransform(viewportTransform);
 
     workspace.clone((cloned: fabric.Rect) => {

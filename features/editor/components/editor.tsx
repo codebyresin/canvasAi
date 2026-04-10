@@ -12,6 +12,7 @@ import { ShapeSidebar } from "./shape-sidebar";
 
 const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
+
   const onChangeActiveTool = useCallback(
     (tool: ActiveTool) => {
       if (tool === activeTool) {
@@ -27,7 +28,7 @@ const Editor = () => {
     },
     [activeTool],
   );
-  const { init } = useEditor();
+  const { init, editor } = useEditor();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const fabricRef = useRef<fabric.Canvas | null>(null);
@@ -78,6 +79,7 @@ const Editor = () => {
           onChangeActiveTool={onChangeActiveTool}
         />
         <ShapeSidebar
+          editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
