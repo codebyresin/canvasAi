@@ -8,11 +8,35 @@ import {
   RECTANGLE_OPTIONS,
   DIAMOND_OPTIONS,
   TRIANGLE_OPTIONS,
+  FONT_FAMILY,
+  FILL_COLOR,
+  STROKE_COLOR,
+  STROKE_WIDTH,
 } from "../type";
+import { useCanvasEvents } from "./useCanvasEvents";
+import { isTextType } from "../untils";
 
 const WORKSPACE_NAME = "workspace";
 
-const buildEditor = ({ canvas }: BuildEditorProps): Editor => {
+/**
+ * @返回一个对象
+ * @这个对象可以插入图形到canvas并居中
+ * @param param0
+ * @returns
+ */
+const buildEditor = ({
+  canvas,
+  fillColor,
+  setFillColor,
+  strokeColor,
+  setStrokeColor,
+  strokeWidth,
+  setStrokeWidth,
+}: BuildEditorProps): Editor => {
+  // console.log("canvas", canvas);
+  // console.log("canvasObject", canvas.getObjects()); //工作区
+  // console.log("canvasActiveObject", canvas.getActiveObject());
+
   const getWorkspace = () => {
     return canvas.getObjects().find((object) => object.name === WORKSPACE_NAME);
   };
@@ -27,7 +51,37 @@ const buildEditor = ({ canvas }: BuildEditorProps): Editor => {
     canvas.add(object);
     canvas.setActiveObject(object);
   };
+
   return {
+    changeFillColor: (value: string) => {
+      setFillColor(value);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ fill: value });
+      });
+      canvas.renderAll();
+    },
+    changeStrokeColor: (value: string) => {
+      setStrokeColor(value);
+      canvas.getActiveObjects().forEach((object) => {
+        // Text types don't have stroke
+        if (isTextType(object.type)) {
+          object.set({ fill: value });
+        }
+        object.set({ stroke: value });
+      });
+      canvas.freeDrawingBrush.color = value;
+      canvas.renderAll();
+    },
+    changeStrokeWidth: (value: number) => {
+      setStrokeWidth(value);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ strokeWidth: value });
+      });
+      canvas.freeDrawingBrush.width = value;
+      canvas.renderAll();
+    },
+
+    //!插入图形
     addCircle: () => {
       const obj = new fabric.Circle({
         ...CIRCLE_OPTIONS,
@@ -71,7 +125,6 @@ const buildEditor = ({ canvas }: BuildEditorProps): Editor => {
 
       addToCanvas(object);
     },
-
     addDiamond: () => {
       const HEIGHT = DIAMOND_OPTIONS.height;
       const WIDTH = DIAMOND_OPTIONS.width;
@@ -89,6 +142,8 @@ const buildEditor = ({ canvas }: BuildEditorProps): Editor => {
       );
       addToCanvas(object);
     },
+    canvas,
+    fillColor,
   };
 };
 
@@ -96,6 +151,15 @@ export const useEditor = () => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
+  const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
+  const [fontFamily, setFontFamily] = useState(FONT_FAMILY);
+  const [fillColor, setFillColor] = useState(FILL_COLOR);
+  const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
+  const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
+
+  //?自定义钩子
+  useCanvasEvents({ canvas, setSelectedObjects });
+  //?监听canvas
   useAutoResize({
     canvas,
     container,
@@ -105,9 +169,17 @@ export const useEditor = () => {
     if (canvas)
       return buildEditor({
         canvas,
+        fillColor,
+        strokeWidth,
+        strokeColor,
+        setFillColor,
+        setStrokeColor,
+        setStrokeWidth,
       });
     return undefined;
   }, [canvas]);
+
+  //初始化
   const init = useCallback(
     ({
       initialCanvas,

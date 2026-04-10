@@ -9,10 +9,10 @@ import { Toolbar } from "./toolbar";
 import { Footer } from "./footer";
 import { ActiveTool } from "../type";
 import { ShapeSidebar } from "./shape-sidebar";
+import { FillColorSidebar } from "./fill-color-sidebar";
 
 const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
-
   const onChangeActiveTool = useCallback(
     (tool: ActiveTool) => {
       if (tool === activeTool) {
@@ -28,6 +28,7 @@ const Editor = () => {
     },
     [activeTool],
   );
+
   const { init, editor } = useEditor();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -78,13 +79,25 @@ const Editor = () => {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
+        {/* 图形 */}
         <ShapeSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
+        {/* 颜色 */}
+        <FillColorSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
         <main className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-muted">
-          <Toolbar />
+          <Toolbar
+            editor={editor}
+            activeTool={activeTool}
+            onChangeActiveTool={onChangeActiveTool}
+            key={JSON.stringify(editor?.canvas.getActiveObject())}
+          />
           <div
             className="relative min-h-0 flex-1 overflow-hidden bg-muted"
             ref={containerRef}
