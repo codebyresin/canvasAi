@@ -1,9 +1,15 @@
+import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 import { ActiveTool, Editor, FILL_COLOR } from "../type";
 import { ToolSidebarHeader } from "./tool-sidebar-header";
 import { ToolSidebarClose } from "./tool-sidebar-close";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ColorPicker } from "./color-pick";
+
+const ColorPicker = dynamic(() => import("./color-pick").then((mod) => mod.ColorPicker), {
+  loading: () => (
+    <div className="h-[440px] w-full animate-pulse rounded-lg border bg-muted/40" />
+  ),
+});
 
 interface FillColorSidebarProps {
   editor: Editor | undefined;
@@ -21,8 +27,6 @@ export const FillColorSidebar = ({
     onChangeActiveTool("select");
   };
   const onChange = (value: string) => {
-    console.log(value);
-
     editor?.changeFillColor(value);
   };
   return (

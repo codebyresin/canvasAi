@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import type { fabric } from "fabric";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useEditor } from "../hooks/useEditor";
@@ -8,8 +9,9 @@ import { Sidebar } from "./sidebar";
 import { Toolbar } from "./toolbar";
 import { Footer } from "./footer";
 import { ActiveTool } from "../type";
-import { ShapeSidebar } from "./shape-sidebar";
-import { FillColorSidebar } from "./fill-color-sidebar";
+
+const ShapeSidebar = dynamic(() => import("./shape-sidebar").then((mod) => mod.ShapeSidebar));
+const FillColorSidebar = dynamic(() => import("./fill-color-sidebar").then((mod) => mod.FillColorSidebar));
 
 const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
@@ -59,6 +61,7 @@ const Editor = () => {
       init({
         initialCanvas: canvas,
         initialContainer: containerRef.current,
+        initialFabric: fabric,
       });
     };
 
@@ -80,17 +83,21 @@ const Editor = () => {
           onChangeActiveTool={onChangeActiveTool}
         />
         {/* 图形 */}
-        <ShapeSidebar
-          editor={editor}
-          activeTool={activeTool}
-          onChangeActiveTool={onChangeActiveTool}
-        />
+        {activeTool === "shapes" && (
+          <ShapeSidebar
+            editor={editor}
+            activeTool={activeTool}
+            onChangeActiveTool={onChangeActiveTool}
+          />
+        )}
         {/* 颜色 */}
-        <FillColorSidebar
-          editor={editor}
-          activeTool={activeTool}
-          onChangeActiveTool={onChangeActiveTool}
-        />
+        {activeTool === "fill" && (
+          <FillColorSidebar
+            editor={editor}
+            activeTool={activeTool}
+            onChangeActiveTool={onChangeActiveTool}
+          />
+        )}
         <main className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-muted">
           <Toolbar
             editor={editor}

@@ -1,6 +1,8 @@
-import { fabric } from "fabric";
-import { ITextboxOptions } from "fabric/fabric-impl";
+import type { fabric } from "fabric";
 import * as material from "material-colors";
+
+export type FabricNamespace = typeof import("fabric").fabric;
+
 export type ActiveTool =
   | "select"
   | "shapes"
@@ -17,12 +19,13 @@ export type ActiveTool =
   | "ai"
   | "remove-bg"
   | "templates";
+
 export type BuildEditorProps = {
   canvas: fabric.Canvas;
+  fabric: FabricNamespace;
   fillColor: string;
   strokeColor: string;
   strokeWidth: number;
-
   setFillColor: (value: string) => void;
   setStrokeColor: (value: string) => void;
   setStrokeWidth: (value: number) => void;
@@ -109,6 +112,7 @@ export const TEXT_OPTIONS = {
   fontSize: FONT_SIZE,
   fontFamily: FONT_FAMILY,
 };
+
 //!编辑器类型
 export interface Editor {
   addCircle: () => void;

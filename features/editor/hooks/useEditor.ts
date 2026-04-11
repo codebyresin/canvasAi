@@ -1,4 +1,4 @@
-import { fabric } from "fabric";
+import type { fabric } from "fabric";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAutoResize } from "./useAutoResize";
 import {
@@ -8,10 +8,10 @@ import {
   RECTANGLE_OPTIONS,
   DIAMOND_OPTIONS,
   TRIANGLE_OPTIONS,
-  FONT_FAMILY,
   FILL_COLOR,
   STROKE_COLOR,
   STROKE_WIDTH,
+  FabricNamespace,
 } from "../type";
 import { useCanvasEvents } from "./useCanvasEvents";
 import { isTextType } from "../untils";
@@ -26,6 +26,7 @@ const WORKSPACE_NAME = "workspace";
  */
 const buildEditor = ({
   canvas,
+  fabric,
   fillColor,
   setFillColor,
   strokeColor,
@@ -145,9 +146,9 @@ const buildEditor = ({
 export const useEditor = () => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
+  const [fabricApi, setFabricApi] = useState<FabricNamespace | null>(null);
 
   const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
-  const [fontFamily, setFontFamily] = useState(FONT_FAMILY);
   const [fillColor, setFillColor] = useState(FILL_COLOR);
   const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
@@ -173,10 +174,11 @@ export const useEditor = () => {
   }, [selectedObjects]);
 
   const editor = useMemo(() => {
-    if (!canvas) return undefined;
+    if (!canvas || !fabricApi) return undefined;
 
     return buildEditor({
       canvas,
+      fabric: fabricApi,
       fillColor,
       strokeWidth,
       strokeColor,
@@ -184,17 +186,19 @@ export const useEditor = () => {
       setStrokeColor,
       setStrokeWidth,
     });
-  }, [canvas, fillColor, strokeColor, strokeWidth]);
+  }, [canvas, fabricApi, fillColor, strokeColor, strokeWidth]);
 
   const init = useCallback(
     ({
       initialCanvas,
       initialContainer,
+      initialFabric,
     }: {
       initialCanvas: fabric.Canvas;
       initialContainer: HTMLDivElement;
+      initialFabric: FabricNamespace;
     }) => {
-      fabric.Object.prototype.set({
+      initialFabric.Object.prototype.set({
         cornerColor: "#FFF",
         cornerStyle: "circle",
         borderColor: "#3b82f6",
@@ -204,7 +208,7 @@ export const useEditor = () => {
         cornerStrokeColor: "#3b82f6",
       });
 
-      const workspace = new fabric.Rect({
+      const workspace = new initialFabric.Rect({
         width: 3000,
         height: 2000,
         name: WORKSPACE_NAME,
@@ -212,7 +216,7 @@ export const useEditor = () => {
         selectable: false,
         evented: false,
         hasControls: false,
-        shadow: new fabric.Shadow({
+        shadow: new initialFabric.Shadow({
           color: "rgba(0,0,0,0.12)",
           blur: 8,
         }),
@@ -232,6 +236,7 @@ export const useEditor = () => {
 
       setCanvas(initialCanvas);
       setContainer(initialContainer);
+      setFabricApi(initialFabric);
     },
     [],
   );

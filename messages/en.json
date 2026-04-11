@@ -1,0 +1,47 @@
+{
+  "Common": {
+    "backHome": "Back to home",
+    "loading": "Loading"
+  },
+  "Home": {
+    "title": "Home",
+    "description": "This is the English home page."
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "The page you requested may have been moved, deleted, or the URL may be incorrect."
+  },
+  "Loading": {
+    "title": "Loading content",
+    "description": "Please wait a moment…"
+  },
+  "Editor": {
+    "Navbar": {
+      "file": "File",
+      "open": "Open",
+      "openJson": "Open a JSON file",
+      "select": "Select",
+      "undo": "Undo",
+      "redo": "Redo",
+      "saved": "Saved",
+      "export": "Export",
+      "saveForLaterEditing": "Save for later editing",
+      "json": "JSON",
+      "png": "PNG",
+      "jpg": "JPG",
+      "svg": "SVG"
+    },
+    "Sidebar": {
+      "design": "Design",
+      "image": "Image",
+      "text": "Text",
+      "shapes": "Shapes",
+      "draw": "Draw",
+      "ai": "AI",
+      "settings": "Settings"
+    },
+    "Toolbar": {
+      "color": "Color"
+    }
+  }
+}

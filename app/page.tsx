@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button";
-export default function Home() {
-  return<div>首页</div>;
+import {redirect} from "next/navigation";
+import {routing} from "@/i18n/routing";
+
+export default function RootPage() {
+  redirect(`/${routing.defaultLocale}`);
 }
