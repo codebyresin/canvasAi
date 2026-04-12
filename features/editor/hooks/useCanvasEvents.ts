@@ -10,6 +10,7 @@ interface UseCanvasEventsProps {
 export const useCanvasEvents = ({
   canvas,
   setSelectedObjects,
+  clearSelectionCallback,
 }: UseCanvasEventsProps) => {
   useEffect(() => {
     if (canvas) {
@@ -22,9 +23,8 @@ export const useCanvasEvents = ({
         setSelectedObjects(e.selected || []);
       });
       canvas.on("selection:cleared", () => {
-        console.log("clear");
-
         setSelectedObjects([]);
+        clearSelectionCallback?.();
       });
     }
 
@@ -41,5 +41,6 @@ export const useCanvasEvents = ({
   }, [
     canvas,
     setSelectedObjects, // No need for this, this is from setState
+    clearSelectionCallback,
   ]);
 };

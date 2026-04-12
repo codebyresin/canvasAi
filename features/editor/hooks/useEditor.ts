@@ -1,4 +1,4 @@
-import type { fabric } from "fabric";
+import { fabric } from "fabric";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAutoResize } from "./useAutoResize";
 import {
@@ -12,6 +12,8 @@ import {
   STROKE_COLOR,
   STROKE_WIDTH,
   FabricNamespace,
+  EditorHookProps,
+  STROKE_DASH_ARRAY,
 } from "../type";
 import { useCanvasEvents } from "./useCanvasEvents";
 import { isTextType } from "../untils";
@@ -33,6 +35,9 @@ const buildEditor = ({
   setStrokeColor,
   strokeWidth,
   setStrokeWidth,
+  strokeDashArray,
+  setStrokeDashArray,
+  selectedObjects,
 }: BuildEditorProps): Editor => {
   const getWorkspace = () => {
     return canvas.getObjects().find((object) => object.name === WORKSPACE_NAME);
@@ -76,6 +81,13 @@ const buildEditor = ({
         object.set({ strokeWidth: value });
       });
       canvas.freeDrawingBrush.width = value;
+      canvas.renderAll();
+    },
+    changeStrokeDashArray: (value: number[]) => {
+      setStrokeDashArray(value);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ strokeDashArray: value });
+      });
       canvas.renderAll();
     },
     addCircle: () => {
@@ -139,11 +151,48 @@ const buildEditor = ({
       addToCanvas(object);
     },
     canvas,
-    fillColor,
+    getActiveFillColor: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) {
+        return fillColor;
+      }
+      const value = selectedObject.get("fill") || fillColor;
+
+      // Currently, gradients & patterns are not supported
+      return value as string;
+    },
+    getActiveStrokeColor: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) {
+        return fillColor;
+      }
+      const value = selectedObject.get("stroke") || strokeColor;
+
+      // Currently, gradients & patterns are not supported
+      return value;
+    },
+    getActiveStrokeWidth: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) {
+        return strokeWidth;
+      }
+      const value = selectedObject.get("strokeWidth") || strokeWidth;
+
+      // Currently, gradients & patterns are not supported
+      return value;
+    },
+    getActiveStrokeDashArray: () => {
+      const selectedObject = selectedObjects[0];
+      if (!selectedObject) {
+        return strokeDashArray;
+      }
+      const value = selectedObject.get("strokeDashArray") || strokeDashArray;
+      return value;
+    },
   };
 };
 
-export const useEditor = () => {
+export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [fabricApi, setFabricApi] = useState<FabricNamespace | null>(null);
@@ -152,8 +201,12 @@ export const useEditor = () => {
   const [fillColor, setFillColor] = useState(FILL_COLOR);
   const [strokeColor, setStrokeColor] = useState(STROKE_COLOR);
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
+  const [strokeDashArray, setStrokeDashArray] =
+    useState<number[]>(STROKE_DASH_ARRAY);
 
-  useCanvasEvents({ canvas, setSelectedObjects });
+  //!canvas的发布订阅hook
+  useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
+  //!添加shape居中于画板
   useAutoResize({
     canvas,
     container,
@@ -161,6 +214,7 @@ export const useEditor = () => {
 
   useEffect(() => {
     const activeObject = selectedObjects[0];
+    console.log(activeObject);
 
     if (!activeObject) {
       setFillColor(FILL_COLOR);
@@ -171,6 +225,10 @@ export const useEditor = () => {
     if (typeof nextFill === "string") {
       setFillColor(nextFill);
     }
+    const nextStoke = activeObject.get("stroke");
+    if (typeof nextStoke === "string") {
+      setStrokeColor(nextStoke);
+    }
   }, [selectedObjects]);
 
   const editor = useMemo(() => {
@@ -178,13 +236,16 @@ export const useEditor = () => {
 
     return buildEditor({
       canvas,
-      fabric: fabricApi,
+      fabric,
       fillColor,
-      strokeWidth,
-      strokeColor,
       setFillColor,
+      strokeColor,
       setStrokeColor,
+      strokeWidth,
       setStrokeWidth,
+      strokeDashArray,
+      setStrokeDashArray,
+      selectedObjects,
     });
   }, [canvas, fabricApi, fillColor, strokeColor, strokeWidth]);
 

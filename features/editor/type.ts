@@ -20,15 +20,32 @@ export type ActiveTool =
   | "remove-bg"
   | "templates";
 
+export const selectionDependentTools = [
+  "fill",
+  "font",
+  "filter",
+  "opacity",
+  "remove-bg",
+  "stroke-color",
+  "stroke-width",
+];
+
+export interface EditorHookProps {
+  clearSelectionCallback?: () => void;
+}
+
 export type BuildEditorProps = {
   canvas: fabric.Canvas;
   fabric: FabricNamespace;
   fillColor: string;
   strokeColor: string;
   strokeWidth: number;
+  strokeDashArray: number[];
   setFillColor: (value: string) => void;
   setStrokeColor: (value: string) => void;
   setStrokeWidth: (value: number) => void;
+  setStrokeDashArray: (value: number[]) => void;
+  selectedObjects: fabric.Object[];
 };
 
 export const colors = [
@@ -124,6 +141,10 @@ export interface Editor {
   changeStrokeWidth: (value: number) => void;
   changeFillColor: (value: string) => void;
   changeStrokeColor: (value: string) => void;
+  changeStrokeDashArray: (value: number[]) => void;
   canvas: fabric.Canvas;
-  fillColor: string;
+  getActiveFillColor: () => string;
+  getActiveStrokeColor: () => string;
+  getActiveStrokeWidth: () => number;
+  getActiveStrokeDashArray: () => number[];
 }

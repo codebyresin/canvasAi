@@ -8,10 +8,20 @@ import { Navbar } from "./navbar";
 import { Sidebar } from "./sidebar";
 import { Toolbar } from "./toolbar";
 import { Footer } from "./footer";
-import { ActiveTool } from "../type";
+import { ActiveTool, selectionDependentTools } from "../type";
 
-const ShapeSidebar = dynamic(() => import("./shape-sidebar").then((mod) => mod.ShapeSidebar));
-const FillColorSidebar = dynamic(() => import("./fill-color-sidebar").then((mod) => mod.FillColorSidebar));
+const ShapeSidebar = dynamic(() =>
+  import("./shape-sidebar").then((mod) => mod.ShapeSidebar),
+);
+const FillColorSidebar = dynamic(() =>
+  import("./fill-color-sidebar").then((mod) => mod.FillColorSidebar),
+);
+const StrokeColorSidebar = dynamic(() =>
+  import("./stroke-color-sidebar").then((mod) => mod.StrokeColorSidebar),
+);
+const StrokeWidthSidebar = dynamic(() =>
+  import("./stroke-width.sidebar").then((mod) => mod.StrokeWidthSidebar),
+);
 
 const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
@@ -31,7 +41,15 @@ const Editor = () => {
     [activeTool],
   );
 
-  const { init, editor } = useEditor();
+  const onClearSelection = useCallback(() => {
+    if (selectionDependentTools.includes(activeTool)) {
+      setActiveTool("select");
+    }
+  }, [activeTool]);
+
+  const { init, editor } = useEditor({
+    clearSelectionCallback: onClearSelection,
+  });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const fabricRef = useRef<fabric.Canvas | null>(null);
@@ -82,22 +100,26 @@ const Editor = () => {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
-        {/* 图形 */}
-        {activeTool === "shapes" && (
-          <ShapeSidebar
-            editor={editor}
-            activeTool={activeTool}
-            onChangeActiveTool={onChangeActiveTool}
-          />
-        )}
-        {/* 颜色 */}
-        {activeTool === "fill" && (
-          <FillColorSidebar
-            editor={editor}
-            activeTool={activeTool}
-            onChangeActiveTool={onChangeActiveTool}
-          />
-        )}
+        <ShapeSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <FillColorSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <StrokeColorSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />{" "}
+        <StrokeWidthSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
         <main className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-muted">
           <Toolbar
             editor={editor}

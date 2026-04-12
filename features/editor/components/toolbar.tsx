@@ -3,6 +3,7 @@ import { Editor, ActiveTool } from "../type";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useMemo } from "react";
+import { BsBorderWidth } from "react-icons/bs";
 
 interface ToolbarProps {
   editor: Editor | undefined;
@@ -15,7 +16,8 @@ export const Toolbar = ({
   activeTool,
   onChangeActiveTool,
 }: ToolbarProps) => {
-  const fillColor = editor?.fillColor;
+  const fillColor = editor?.getActiveFillColor();
+  const strokeColor = editor?.getActiveStrokeColor();
   return (
     <div className="z-11 flex h-14 w-full shrink-0 items-center gap-x-2 overflow-x-auto border-b bg-white p-2">
       <div className="flex h-full items-center justify-center">
@@ -32,6 +34,33 @@ export const Toolbar = ({
                 backgroundColor: fillColor,
               }}
             />
+          </Button>
+        </Hint>
+      </div>
+      <div className="flex items-center h-full justify-center">
+        <Hint label="Stroke color" side="bottom" sideOffset={5}>
+          <Button
+            onClick={() => onChangeActiveTool("stroke-color")}
+            size="icon"
+            variant="ghost"
+            className={cn(activeTool === "stroke-color" && "bg-gray-100")}
+          >
+            <div
+              className="rounded-sm size-4 border-2 bg-white"
+              style={{ borderColor: strokeColor }}
+            />
+          </Button>
+        </Hint>
+      </div>
+      <div className="flex items-center h-full justify-center">
+        <Hint label="Stroke width" side="bottom" sideOffset={5}>
+          <Button
+            onClick={() => onChangeActiveTool("stroke-width")}
+            size="icon"
+            variant="ghost"
+            className={cn(activeTool === "stroke-width" && "bg-gray-100")}
+          >
+            <BsBorderWidth className="size-4" />
           </Button>
         </Hint>
       </div>

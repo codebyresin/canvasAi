@@ -5,11 +5,9 @@ import { ToolSidebarHeader } from "./tool-sidebar-header";
 import { ToolSidebarClose } from "./tool-sidebar-close";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const ColorPicker = dynamic(() => import("./color-pick").then((mod) => mod.ColorPicker), {
-  loading: () => (
-    <div className="h-[440px] w-full animate-pulse rounded-lg border bg-muted/40" />
-  ),
-});
+const ColorPicker = dynamic(() =>
+  import("./color-pick").then((mod) => mod.ColorPicker),
+);
 
 interface FillColorSidebarProps {
   editor: Editor | undefined;
@@ -21,7 +19,7 @@ export const FillColorSidebar = ({
   activeTool,
   onChangeActiveTool,
 }: FillColorSidebarProps) => {
-  const value = editor?.fillColor || FILL_COLOR;
+  const value = editor?.getActiveFillColor() || FILL_COLOR;
 
   const onClose = () => {
     onChangeActiveTool("select");
