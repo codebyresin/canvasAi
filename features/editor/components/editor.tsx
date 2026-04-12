@@ -71,7 +71,7 @@ const Editor = () => {
 
       const canvas = new fabric.Canvas(canvasRef.current, {
         controlsAboveOverlay: true,
-        preserveObjectStacking: true,
+        preserveObjectStacking: true, //!开启可以显示图层层级
       });
 
       fabricRef.current = canvas;
