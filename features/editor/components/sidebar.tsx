@@ -9,6 +9,7 @@ import {
   Sparkles,
   Type,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { SidebarItem } from "./side-item";
 import { ActiveTool } from "../type";
 
@@ -16,52 +17,55 @@ interface SidebarProps {
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
-//侧边栏配置项
-const SIDEITEMOPTION = [
-  {
-    icon: LayoutTemplate,
-    label: "Design",
-    isActive: "templates",
-  },
-  {
-    icon: ImageIcon,
-    label: "Image",
-    isActive: "images",
-  },
-  {
-    icon: Type,
-    label: "Text",
-    isActive: "text",
-  },
-  {
-    icon: Shapes,
-    label: "Shapes",
-    isActive: "shapes",
-  },
-  {
-    icon: Pencil,
-    label: "Draw",
-    isActive: "draw",
-  },
-  {
-    icon: Sparkles,
-    label: "AI",
-    isActive: "ai",
-  },
-  {
-    icon: Settings,
-    label: "Settings",
-    isActive: "settings",
-  },
-];
+
 export const Sidebar = ({ activeTool, onChangeActiveTool }: SidebarProps) => {
+  const t = useTranslations("Editor.Sidebar");
+
+  const sideItemOptions = [
+    {
+      icon: LayoutTemplate,
+      label: t("design"),
+      isActive: "templates",
+    },
+    {
+      icon: ImageIcon,
+      label: t("image"),
+      isActive: "images",
+    },
+    {
+      icon: Type,
+      label: t("text"),
+      isActive: "text",
+    },
+    {
+      icon: Shapes,
+      label: t("shapes"),
+      isActive: "shapes",
+    },
+    {
+      icon: Pencil,
+      label: t("draw"),
+      isActive: "draw",
+    },
+    {
+      icon: Sparkles,
+      label: t("ai"),
+      isActive: "ai",
+    },
+    {
+      icon: Settings,
+      label: t("settings"),
+      isActive: "settings",
+    },
+  ] as const;
+
   return (
     <aside className="bg-white flex flex-col w-25 h-full border-r overflow-y-auto">
       <ul className="flex flex-col">
-        {SIDEITEMOPTION.map((item) => {
+        {sideItemOptions.map((item) => {
           return (
             <SidebarItem
-              key={item.label}
+              key={item.isActive}
               icon={item.icon}
               label={item.label}
               isActive={activeTool === item.isActive}

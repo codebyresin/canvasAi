@@ -41,7 +41,27 @@
       "settings": "Settings"
     },
     "Toolbar": {
-      "color": "Color"
+      "color": "Color",
+      "strokeColor": "Stroke color",
+      "strokeWidth": "Stroke width"
+    },
+    "ShapeSidebar": {
+      "title": "Shapes",
+      "description": "Add shapes to your canvas"
+    },
+    "FillColorSidebar": {
+      "title": "Fill color",
+      "description": "Add fill color to your element"
+    },
+    "StrokeColorSidebar": {
+      "title": "Stroke color",
+      "description": "Add stroke color to your element"
+    },
+    "StrokeWidthSidebar": {
+      "title": "Stroke options",
+      "description": "Modify the stroke of your element",
+      "widthLabel": "Stroke width",
+      "typeLabel": "Stroke type"
     }
   }
 }

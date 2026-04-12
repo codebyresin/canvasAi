@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { ActiveTool, Editor } from "../type";
 import { ToolSidebarHeader } from "./tool-sidebar-header";
@@ -19,6 +20,7 @@ export const ShapeSidebar = ({
   activeTool,
   onChangeActiveTool,
 }: ShapeSidebarProps) => {
+  const t = useTranslations("Editor.ShapeSidebar");
   const isOpen = activeTool === "shapes";
 
   const onClose = () => {
@@ -41,8 +43,8 @@ export const ShapeSidebar = ({
         )}
       >
         <ToolSidebarHeader
-          title="Shapes"
-          description="Add shapes to your canvas"
+          title={t("title")}
+          description={t("description")}
         />
         <ScrollArea>
           <div className="grid grid-cols-3 gap-4 p-4">

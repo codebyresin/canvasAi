@@ -1,7 +1,7 @@
+import { useTranslations } from "next-intl";
 import { ActiveTool, Editor, STROKE_COLOR } from "@/features/editor/type";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
 import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-header";
-
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ColorPicker } from "./color-pick";
@@ -17,6 +17,7 @@ export const StrokeColorSidebar = ({
   activeTool,
   onChangeActiveTool,
 }: StrokeColorSidebarProps) => {
+  const t = useTranslations("Editor.StrokeColorSidebar");
   const value = editor?.getActiveStrokeColor() || STROKE_COLOR;
 
   const onClose = () => {
@@ -35,8 +36,8 @@ export const StrokeColorSidebar = ({
       )}
     >
       <ToolSidebarHeader
-        title="Stroke color"
-        description="Add stroke color to your element"
+        title={t("title")}
+        description={t("description")}
       />
       <ScrollArea>
         <div className="p-4 space-y-6">

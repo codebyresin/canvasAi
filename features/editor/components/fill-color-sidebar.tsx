@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { ActiveTool, Editor, FILL_COLOR } from "../type";
 import { ToolSidebarHeader } from "./tool-sidebar-header";
@@ -19,6 +20,7 @@ export const FillColorSidebar = ({
   activeTool,
   onChangeActiveTool,
 }: FillColorSidebarProps) => {
+  const t = useTranslations("Editor.FillColorSidebar");
   const value = editor?.getActiveFillColor() || FILL_COLOR;
 
   const onClose = () => {
@@ -35,8 +37,8 @@ export const FillColorSidebar = ({
       )}
     >
       <ToolSidebarHeader
-        title="Fill color"
-        description="Add fill color to your element"
+        title={t("title")}
+        description={t("description")}
       />
 
       <ScrollArea>

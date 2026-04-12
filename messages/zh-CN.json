@@ -41,7 +41,27 @@
       "settings": "设置"
     },
     "Toolbar": {
-      "color": "颜色"
+      "color": "颜色",
+      "strokeColor": "描边颜色",
+      "strokeWidth": "描边宽度"
+    },
+    "ShapeSidebar": {
+      "title": "形状",
+      "description": "向画布中添加形状"
+    },
+    "FillColorSidebar": {
+      "title": "填充颜色",
+      "description": "为当前元素设置填充颜色"
+    },
+    "StrokeColorSidebar": {
+      "title": "描边颜色",
+      "description": "为当前元素设置描边颜色"
+    },
+    "StrokeWidthSidebar": {
+      "title": "描边选项",
+      "description": "修改当前元素的描边样式",
+      "widthLabel": "描边宽度",
+      "typeLabel": "描边类型"
     }
   }
 }

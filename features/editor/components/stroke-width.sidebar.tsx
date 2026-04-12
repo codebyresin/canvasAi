@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import {
   ActiveTool,
   Editor,
@@ -6,13 +7,12 @@ import {
 } from "@/features/editor/type";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
 import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-header";
-
 import { cn } from "@/lib/utils";
-
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Label } from "@/components/ui/label";
+
 interface StrokeWidthSidebarProps {
   editor: Editor | undefined;
   activeTool: ActiveTool;
@@ -24,6 +24,7 @@ export const StrokeWidthSidebar = ({
   activeTool,
   onChangeActiveTool,
 }: StrokeWidthSidebarProps) => {
+  const t = useTranslations("Editor.StrokeWidthSidebar");
   const widthValue = editor?.getActiveStrokeWidth() || STROKE_WIDTH;
   const typeValue = editor?.getActiveStrokeDashArray() || STROKE_DASH_ARRAY;
 
@@ -47,19 +48,19 @@ export const StrokeWidthSidebar = ({
       )}
     >
       <ToolSidebarHeader
-        title="Stroke options"
-        description="Modify the stroke of your element"
+        title={t("title")}
+        description={t("description")}
       />
       <ScrollArea>
         <div className="p-4 space-y-4 border-b">
-          <Label className="text-sm">Stroke width</Label>
+          <Label className="text-sm">{t("widthLabel")}</Label>
           <Slider
             value={[widthValue]}
             onValueChange={(values) => onChangeStrokeWidth(values[0])}
           />
         </div>
         <div className="p-4 space-y-4 border-b">
-          <Label className="text-sm">Stroke type</Label>
+          <Label className="text-sm">{t("typeLabel")}</Label>
           <Button
             onClick={() => onChangeStrokeType([])}
             variant="secondary"

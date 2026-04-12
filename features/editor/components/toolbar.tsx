@@ -1,8 +1,8 @@
+import { useTranslations } from "next-intl";
 import { Hint } from "@/components/hint";
 import { Editor, ActiveTool } from "../type";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useMemo } from "react";
 import { BsBorderWidth } from "react-icons/bs";
 
 interface ToolbarProps {
@@ -16,12 +16,14 @@ export const Toolbar = ({
   activeTool,
   onChangeActiveTool,
 }: ToolbarProps) => {
+  const t = useTranslations("Editor.Toolbar");
   const fillColor = editor?.getActiveFillColor();
   const strokeColor = editor?.getActiveStrokeColor();
+
   return (
     <div className="z-11 flex h-14 w-full shrink-0 items-center gap-x-2 overflow-x-auto border-b bg-white p-2">
       <div className="flex h-full items-center justify-center">
-        <Hint label="Color" side="bottom" sideOffset={5}>
+        <Hint label={t("color")} side="bottom" sideOffset={5}>
           <Button
             onClick={() => onChangeActiveTool("fill")}
             variant="ghost"
@@ -38,7 +40,7 @@ export const Toolbar = ({
         </Hint>
       </div>
       <div className="flex items-center h-full justify-center">
-        <Hint label="Stroke color" side="bottom" sideOffset={5}>
+        <Hint label={t("strokeColor")} side="bottom" sideOffset={5}>
           <Button
             onClick={() => onChangeActiveTool("stroke-color")}
             size="icon"
@@ -53,7 +55,7 @@ export const Toolbar = ({
         </Hint>
       </div>
       <div className="flex items-center h-full justify-center">
-        <Hint label="Stroke width" side="bottom" sideOffset={5}>
+        <Hint label={t("strokeWidth")} side="bottom" sideOffset={5}>
           <Button
             onClick={() => onChangeActiveTool("stroke-width")}
             size="icon"
