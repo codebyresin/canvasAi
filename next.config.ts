@@ -1,14 +1,11 @@
 import createNextIntlPlugin from "next-intl/plugin";
 import type { NextConfig } from "next";
-import withBundleAnalyzer from "@next/bundle-analyzer";
 
 // 1. 初始化 next-intl
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 // 3. 基础配置
 const nextConfig: NextConfig = {
-  distDir: "build",
-  output: "standalone",
   // 你的其他配置
   images: {
     formats: ["image/webp", "image/avif"],

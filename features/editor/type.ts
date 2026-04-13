@@ -1,5 +1,6 @@
 import type { fabric } from "fabric";
 import * as material from "material-colors";
+import { ITextboxOptions } from "fabric/fabric-impl";
 
 export type FabricNamespace = typeof import("fabric").fabric;
 
@@ -33,7 +34,26 @@ export const selectionDependentTools = [
 export interface EditorHookProps {
   clearSelectionCallback?: () => void;
 }
-
+export const fonts = [
+  "Arial",
+  "Arial Black",
+  "Verdana",
+  "Helvetica",
+  "Tahoma",
+  "Trebuchet MS",
+  "Times New Roman",
+  "Georgia",
+  "Garamond",
+  "Courier New",
+  "Brush Script MT",
+  "Palatino",
+  "Bookman",
+  "Comic Sans MS",
+  "Impact",
+  "Lucida Sans Unicode",
+  "Geneva",
+  "Lucida Console",
+];
 export type BuildEditorProps = {
   canvas: fabric.Canvas;
   fabric: FabricNamespace;
@@ -41,10 +61,12 @@ export type BuildEditorProps = {
   strokeColor: string;
   strokeWidth: number;
   strokeDashArray: number[];
+  fontFamily: string;
   setFillColor: (value: string) => void;
   setStrokeColor: (value: string) => void;
   setStrokeWidth: (value: number) => void;
   setStrokeDashArray: (value: number[]) => void;
+  setFontFamily: (value: string) => void;
   selectedObjects: fabric.Object[];
 };
 
@@ -138,6 +160,7 @@ export interface Editor {
   addTriangle: () => void;
   addInverseTriangle: () => void;
   addDiamond: () => void;
+  addText: (value: string, options?: ITextboxOptions) => void;
   changeStrokeWidth: (value: number) => void;
   changeFillColor: (value: string) => void;
   changeStrokeColor: (value: string) => void;
@@ -149,4 +172,21 @@ export interface Editor {
   getActiveStrokeDashArray: () => number[];
   bringForward: () => void;
   sendBackwards: () => void;
+  getActiveOpacity: () => number;
+  changeOpacity: (value: number) => void;
+  getActiveFontFamily: () => string;
+  changeFontFamily: (value: string) => void;
+  selectedObjects: fabric.Object[];
+  changeFontSize: (value: number) => void;
+  getActiveFontSize: () => number;
+  changeTextAlign: (value: string) => void;
+  getActiveTextAlign: () => string;
+  changeFontUnderline: (value: boolean) => void;
+  getActiveFontUnderline: () => boolean;
+  changeFontLinethrough: (value: boolean) => void;
+  getActiveFontLinethrough: () => boolean;
+  changeFontStyle: (value: string) => void;
+  getActiveFontStyle: () => string;
+  changeFontWeight: (value: number) => void;
+  getActiveFontWeight: () => number;
 }

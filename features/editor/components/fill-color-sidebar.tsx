@@ -41,7 +41,7 @@ export const FillColorSidebar = ({
         description={t("description")}
       />
 
-      <ScrollArea>
+      <ScrollArea className="min-h-0 flex-1">
         <div className="p-4 space-y-6">
           <ColorPicker value={value} onChange={onChange} />
         </div>

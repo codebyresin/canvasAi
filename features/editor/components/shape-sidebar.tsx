@@ -46,7 +46,7 @@ export const ShapeSidebar = ({
           title={t("title")}
           description={t("description")}
         />
-        <ScrollArea>
+        <ScrollArea className="min-h-0 flex-1">
           <div className="grid grid-cols-3 gap-4 p-4">
             <ShapeTool onClick={() => editor?.addCircle()} icon={FaCircle} />
             <ShapeTool

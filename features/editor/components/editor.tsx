@@ -9,6 +9,7 @@ import { Sidebar } from "./sidebar";
 import { Toolbar } from "./toolbar";
 import { Footer } from "./footer";
 import { ActiveTool, selectionDependentTools } from "../type";
+import { OpacitySidebar } from "./opacity-sidebar";
 
 const ShapeSidebar = dynamic(() =>
   import("./shape-sidebar").then((mod) => mod.ShapeSidebar),
@@ -22,7 +23,12 @@ const StrokeColorSidebar = dynamic(() =>
 const StrokeWidthSidebar = dynamic(() =>
   import("./stroke-width.sidebar").then((mod) => mod.StrokeWidthSidebar),
 );
-
+const TextSidebar = dynamic(() =>
+  import("./text-sidebar").then((mod) => mod.TextSidebar),
+);
+const FontSidebar = dynamic(() =>
+  import("./font-sidebar").then((mod) => mod.FontSidebar),
+);
 const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
   const onChangeActiveTool = useCallback(
@@ -114,8 +120,23 @@ const Editor = () => {
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
-        />{" "}
+        />
         <StrokeWidthSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <OpacitySidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <TextSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <FontSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}

@@ -43,7 +43,11 @@
     "Toolbar": {
       "color": "颜色",
       "strokeColor": "描边颜色",
-      "strokeWidth": "描边宽度"
+      "strokeWidth": "描边宽度",
+      "font": "字体",
+      "bringForward": "上移一层",
+      "sendBackwards": "下移一层",
+      "opacity": "不透明度"
     },
     "ShapeSidebar": {
       "title": "形状",
@@ -62,6 +66,29 @@
       "description": "修改当前元素的描边样式",
       "widthLabel": "描边宽度",
       "typeLabel": "描边类型"
+    },
+    "FontSidebar": {
+      "title": "字体",
+      "description": "更改文本字体"
+    },
+    "TextSidebar": {
+      "title": "文本",
+      "description": "向画布中添加文本",
+      "addTextbox": "添加文本框",
+      "addHeading": "添加标题",
+      "addSubheading": "添加副标题",
+      "paragraph": "段落",
+      "defaultTextbox": "文本框",
+      "defaultHeading": "标题",
+      "defaultSubheading": "副标题",
+      "defaultParagraph": "段落"
+    },
+    "OpacitySidebar": {
+      "title": "不透明度",
+      "description": "调整所选对象的不透明度"
+    },
+    "Logo": {
+      "alt": "AICanva 标志"
     }
   }
 }

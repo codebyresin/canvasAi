@@ -43,7 +43,11 @@
     "Toolbar": {
       "color": "Color",
       "strokeColor": "Stroke color",
-      "strokeWidth": "Stroke width"
+      "strokeWidth": "Stroke width",
+      "font": "Font",
+      "bringForward": "Bring forward",
+      "sendBackwards": "Send backwards",
+      "opacity": "Opacity"
     },
     "ShapeSidebar": {
       "title": "Shapes",
@@ -62,6 +66,29 @@
       "description": "Modify the stroke of your element",
       "widthLabel": "Stroke width",
       "typeLabel": "Stroke type"
+    },
+    "FontSidebar": {
+      "title": "Font",
+      "description": "Change the text font"
+    },
+    "TextSidebar": {
+      "title": "Text",
+      "description": "Add text to your canvas",
+      "addTextbox": "Add a textbox",
+      "addHeading": "Add a heading",
+      "addSubheading": "Add a subheading",
+      "paragraph": "Paragraph",
+      "defaultTextbox": "Textbox",
+      "defaultHeading": "Heading",
+      "defaultSubheading": "Subheading",
+      "defaultParagraph": "Paragraph"
+    },
+    "OpacitySidebar": {
+      "title": "Opacity",
+      "description": "Change the opacity of the selected object"
+    },
+    "Logo": {
+      "alt": "AICanva logo"
     }
   }
 }
