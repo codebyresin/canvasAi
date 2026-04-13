@@ -5,7 +5,6 @@ import { Hint } from "@/components/hint";
 import {
   Editor,
   ActiveTool,
-  FONT_FAMILY,
   FONT_WEIGHT,
   FONT_SIZE,
 } from "../type";
@@ -21,8 +20,6 @@ import {
   AlignCenter,
   AlignRight,
   Trash,
-  SquareSplitHorizontal,
-  Copy,
 } from "lucide-react";
 import { isTextType } from "../untils";
 import { useState } from "react";
@@ -39,6 +36,7 @@ export const Toolbar = ({
   onChangeActiveTool,
 }: ToolbarProps) => {
   const t = useTranslations("Editor.Toolbar");
+  const fontInputT = useTranslations("Editor.FontSizeInput");
 
   const initialFillColor = editor?.getActiveFillColor();
   const initialStrokeColor = editor?.getActiveStrokeColor();
@@ -64,7 +62,6 @@ export const Toolbar = ({
   const selectedObject = editor?.selectedObjects[0];
   const selectedObjectType = editor?.selectedObjects[0]?.type;
   const isText = isTextType(selectedObjectType);
-  const isImage = selectedObjectType === "image";
 
   const onChangeFontSize = (value: number) => {
     if (!selectedObject) {
@@ -219,7 +216,7 @@ export const Toolbar = ({
       )}
       {isText && (
         <div className="flex items-center h-full justify-center">
-          <Hint label="Bold" side="bottom" sideOffset={5}>
+          <Hint label={t("bold")} side="bottom" sideOffset={5}>
             <Button
               onClick={toggleBold}
               size="icon"
@@ -233,7 +230,7 @@ export const Toolbar = ({
       )}
       {isText && (
         <div className="flex items-center h-full justify-center">
-          <Hint label="Italic" side="bottom" sideOffset={5}>
+          <Hint label={t("italic")} side="bottom" sideOffset={5}>
             <Button
               onClick={toggleItalic}
               size="icon"
@@ -247,7 +244,7 @@ export const Toolbar = ({
       )}
       {isText && (
         <div className="flex items-center h-full justify-center">
-          <Hint label="Underline" side="bottom" sideOffset={5}>
+          <Hint label={t("underline")} side="bottom" sideOffset={5}>
             <Button
               onClick={toggleUnderline}
               size="icon"
@@ -261,7 +258,7 @@ export const Toolbar = ({
       )}
       {isText && (
         <div className="flex items-center h-full justify-center">
-          <Hint label="Strike" side="bottom" sideOffset={5}>
+          <Hint label={t("strike")} side="bottom" sideOffset={5}>
             <Button
               onClick={toggleLinethrough}
               size="icon"
@@ -275,7 +272,7 @@ export const Toolbar = ({
       )}
       {isText && (
         <div className="flex items-center h-full justify-center">
-          <Hint label="Align left" side="bottom" sideOffset={5}>
+          <Hint label={t("alignLeft")} side="bottom" sideOffset={5}>
             <Button
               onClick={() => onChangeTextAlign("left")}
               size="icon"
@@ -289,7 +286,7 @@ export const Toolbar = ({
       )}
       {isText && (
         <div className="flex items-center h-full justify-center">
-          <Hint label="Align center" side="bottom" sideOffset={5}>
+          <Hint label={t("alignCenter")} side="bottom" sideOffset={5}>
             <Button
               onClick={() => onChangeTextAlign("center")}
               size="icon"
@@ -303,7 +300,7 @@ export const Toolbar = ({
       )}
       {isText && (
         <div className="flex items-center h-full justify-center">
-          <Hint label="Align right" side="bottom" sideOffset={5}>
+          <Hint label={t("alignRight")} side="bottom" sideOffset={5}>
             <Button
               onClick={() => onChangeTextAlign("right")}
               size="icon"
@@ -320,6 +317,11 @@ export const Toolbar = ({
           <FontSizeInput
             value={properties.fontSize}
             onChange={onChangeFontSize}
+            t={{
+              decrease: fontInputT("decrease"),
+              increase: fontInputT("increase"),
+              inputLabel: fontInputT("inputLabel"),
+            }}
           />
         </div>
       )}
@@ -354,6 +356,13 @@ export const Toolbar = ({
             className={cn(activeTool === "opacity" && "bg-gray-100")}
           >
             <RxTransparencyGrid className="size-4" />
+          </Button>
+        </Hint>
+      </div>
+      <div className="flex items-center h-full justify-center">
+        <Hint label={t("delete")} side="bottom" sideOffset={5}>
+          <Button onClick={() => editor?.delete()} size="icon" variant="ghost">
+            <Trash className="size-4" />
           </Button>
         </Hint>
       </div>

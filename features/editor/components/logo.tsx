@@ -1,15 +1,14 @@
 "use client";
 
-import Link from "next/link";
+import {Link} from "@/i18n/navigation";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { routing } from "@/i18n/routing";
 
 export const Logo = () => {
   const t = useTranslations("Editor.Logo");
 
   return (
-    <Link href={`/${routing.defaultLocale}`}>
+    <Link href="/">
       <div className="size-8 relative shrink-0">
         <Image
           priority

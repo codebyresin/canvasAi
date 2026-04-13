@@ -63,6 +63,13 @@ const buildEditor = ({
   };
 
   return {
+    delete: () => {
+      canvas.getActiveObjects().forEach((obj) => {
+        canvas.remove(obj);
+        canvas.discardActiveObject();
+        canvas.renderAll();
+      });
+    },
     changeFillColor: (value: string) => {
       setFillColor(value);
       canvas.getActiveObjects().forEach((object) => {

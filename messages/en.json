@@ -45,9 +45,17 @@
       "strokeColor": "Stroke color",
       "strokeWidth": "Stroke width",
       "font": "Font",
+      "bold": "Bold",
+      "italic": "Italic",
+      "underline": "Underline",
+      "strike": "Strikethrough",
+      "alignLeft": "Align left",
+      "alignCenter": "Align center",
+      "alignRight": "Align right",
       "bringForward": "Bring forward",
       "sendBackwards": "Send backwards",
-      "opacity": "Opacity"
+      "opacity": "Opacity",
+      "delete": "Delete"
     },
     "ShapeSidebar": {
       "title": "Shapes",
@@ -86,6 +94,11 @@
     "OpacitySidebar": {
       "title": "Opacity",
       "description": "Change the opacity of the selected object"
+    },
+    "FontSizeInput": {
+      "decrease": "Decrease font size",
+      "increase": "Increase font size",
+      "inputLabel": "Font size"
     },
     "Logo": {
       "alt": "AICanva logo"

@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { getTranslations } from "next-intl/server";
-import { routing } from "@/i18n/routing";
+import {Link} from "@/i18n/navigation";
+import {getTranslations} from "next-intl/server";
 
 const NotFound = async () => {
   const t = await getTranslations("NotFound");
@@ -16,7 +15,7 @@ const NotFound = async () => {
         <p className="text-sm leading-6 text-muted-foreground">{t("description")}</p>
         <div className="pt-2">
           <Link
-            href={`/${routing.defaultLocale}`}
+            href="/"
             className="inline-flex rounded-full bg-foreground px-5 py-2 text-sm font-medium text-background transition-opacity hover:opacity-85"
           >
             {common("backHome")}

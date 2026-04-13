@@ -45,9 +45,17 @@
       "strokeColor": "描边颜色",
       "strokeWidth": "描边宽度",
       "font": "字体",
+      "bold": "加粗",
+      "italic": "斜体",
+      "underline": "下划线",
+      "strike": "删除线",
+      "alignLeft": "左对齐",
+      "alignCenter": "居中对齐",
+      "alignRight": "右对齐",
       "bringForward": "上移一层",
       "sendBackwards": "下移一层",
-      "opacity": "不透明度"
+      "opacity": "不透明度",
+      "delete": "删除"
     },
     "ShapeSidebar": {
       "title": "形状",
@@ -86,6 +94,11 @@
     "OpacitySidebar": {
       "title": "不透明度",
       "description": "调整所选对象的不透明度"
+    },
+    "FontSizeInput": {
+      "decrease": "减小字号",
+      "increase": "增大字号",
+      "inputLabel": "字体大小"
     },
     "Logo": {
       "alt": "AICanva 标志"

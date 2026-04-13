@@ -154,6 +154,7 @@ export const TEXT_OPTIONS = {
 
 //!编辑器类型
 export interface Editor {
+  delete: () => void;
   addCircle: () => void;
   addSoftRectangle: () => void;
   addRectangle: () => void;

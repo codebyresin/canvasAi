@@ -29,6 +29,10 @@ const TextSidebar = dynamic(() =>
 const FontSidebar = dynamic(() =>
   import("./font-sidebar").then((mod) => mod.FontSidebar),
 );
+const ImageSidebar = dynamic(() =>
+  import("./image-sidebar").then((mod) => mod.ImageSidebar),
+);
+
 const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
   const onChangeActiveTool = useCallback(
@@ -137,6 +141,11 @@ const Editor = () => {
           onChangeActiveTool={onChangeActiveTool}
         />
         <FontSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <ImageSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
