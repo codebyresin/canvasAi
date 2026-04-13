@@ -190,4 +190,5 @@ export interface Editor {
   getActiveFontStyle: () => string;
   changeFontWeight: (value: number) => void;
   getActiveFontWeight: () => number;
+  addImage: (value: string) => void;
 }
