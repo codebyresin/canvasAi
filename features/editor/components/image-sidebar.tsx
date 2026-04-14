@@ -16,7 +16,7 @@ import {
 import { useLoadMoreOnScroll } from "@/features/images/hooks/use-load-more-on-scroll";
 
 import { cn } from "@/lib/utils";
-// import { UploadButton } from "@/lib/uploadthing";
+import { UploadButton } from "@/lib/uploadthing";
 
 interface ImageSidebarProps {
   editor: Editor | undefined;
@@ -70,6 +70,21 @@ export const ImageSidebar = ({
         title="Images"
         description={`Browse Unsplash images · ${totalLoaded}/${MAX_IMAGES}`}
       />
+      <div className="p-4 border-b">
+        <UploadButton
+          appearance={{
+            button: "w-full text-sm font-medium",
+            allowedContent: "hidden",
+          }}
+          content={{
+            button: "Upload Image",
+          }}
+          endpoint="imageUploader"
+          onClientUploadComplete={(res) => {
+            editor?.addImage(res[0].ufsUrl);
+          }}
+        />
+      </div>
       {isLoading && (
         <div className="flex items-center justify-center flex-1">
           <Loader className="size-4 text-muted-foreground animate-spin" />
@@ -83,6 +98,7 @@ export const ImageSidebar = ({
           </p>
         </div>
       )}
+
       {!isLoading && !isError && (
         <div ref={containerRef} className="min-h-0 flex-1 overflow-y-auto">
           <div className="p-4 space-y-4">
