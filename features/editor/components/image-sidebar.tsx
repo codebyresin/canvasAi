@@ -1,16 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
-import { AlertTriangle, Loader, Upload } from "lucide-react";
+import { AlertTriangle, Loader } from "lucide-react";
+import { useCallback } from "react";
 
 import { ActiveTool, Editor } from "@/features/editor/type";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
 import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-header";
 
-import { useGetImages } from "@/features/images/api/use-get-images";
+import { useInfiniteImages } from "@/features/images/api/use-infinite-images";
+import {
+  IMAGES_PER_PAGE,
+  LOAD_MORE_THRESHOLD,
+  MAX_IMAGES,
+} from "@/features/images/constants";
+import { useLoadMoreOnScroll } from "@/features/images/hooks/use-load-more-on-scroll";
 
 import { cn } from "@/lib/utils";
 // import { UploadButton } from "@/lib/uploadthing";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface ImageSidebarProps {
   editor: Editor | undefined;
@@ -23,11 +29,35 @@ export const ImageSidebar = ({
   activeTool,
   onChangeActiveTool,
 }: ImageSidebarProps) => {
-  const { data, isLoading, isError } = useGetImages();
+  const {
+    images, // 当前已加载的所有图片数组
+    isLoading, // 首次加载状态 (true/false)
+    isError, // 是否出错
+    hasNextPage, // 是否还有下一页数据
+    isFetchingNextPage, // 是否正在加载下一页
+    fetchNextPage, // 触发加载下一页的函数
+    totalLoaded, // 已加载图片总数
+    hasReachedMax, // 是否已达到最大加载限制
+  } = useInfiniteImages();
 
   const onClose = () => {
     onChangeActiveTool("select");
   };
+
+  const handleLoadMore = useCallback(() => {
+    if (!hasNextPage || isFetchingNextPage || hasReachedMax) {
+      return;
+    }
+
+    void fetchNextPage();
+  }, [fetchNextPage, hasNextPage, hasReachedMax, isFetchingNextPage]);
+
+  const { containerRef } = useLoadMoreOnScroll({
+    hasMore: Boolean(hasNextPage) && !hasReachedMax,
+    isLoadingMore: isFetchingNextPage,
+    onLoadMore: handleLoadMore,
+    threshold: LOAD_MORE_THRESHOLD,
+  });
 
   return (
     <aside
@@ -38,7 +68,7 @@ export const ImageSidebar = ({
     >
       <ToolSidebarHeader
         title="Images"
-        description="Add images to your canvas"
+        description={`Browse Unsplash images · ${totalLoaded}/${MAX_IMAGES}`}
       />
       {isLoading && (
         <div className="flex items-center justify-center flex-1">
@@ -53,11 +83,11 @@ export const ImageSidebar = ({
           </p>
         </div>
       )}
-      <ScrollArea className="min-h-0 flex-1">
-        <div className="p-4">
-          <div className="grid grid-cols-2 gap-4 ">
-            {data &&
-              data.map((image) => {
+      {!isLoading && !isError && (
+        <div ref={containerRef} className="min-h-0 flex-1 overflow-y-auto">
+          <div className="p-4 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              {images.map((image) => {
                 return (
                   <button
                     onClick={() => editor?.addImage(image.urls.regular)}
@@ -68,6 +98,7 @@ export const ImageSidebar = ({
                       fill
                       src={image.urls.small}
                       alt={image.alt_description || "Image"}
+                      sizes="(max-width: 768px) 50vw, 180px"
                       className="object-cover"
                     />
                     <Link
@@ -80,9 +111,37 @@ export const ImageSidebar = ({
                   </button>
                 );
               })}
+            </div>
+
+            {isFetchingNextPage && (
+              <div className="flex items-center justify-center py-2">
+                <Loader className="size-4 text-muted-foreground animate-spin" />
+              </div>
+            )}
+
+            {!isFetchingNextPage && hasNextPage && !hasReachedMax && (
+              <p className="text-center text-xs text-muted-foreground">
+                Continue scrolling to load more images
+              </p>
+            )}
+
+            {hasReachedMax && (
+              <div className="rounded-md border border-dashed bg-muted/30 px-3 py-2 text-center text-xs text-muted-foreground">
+                Reached the max of {MAX_IMAGES} images. Refresh to load a new
+                set.
+              </div>
+            )}
+
+            {!hasReachedMax &&
+              !hasNextPage &&
+              images.length >= IMAGES_PER_PAGE && (
+                <div className="rounded-md border border-dashed bg-muted/30 px-3 py-2 text-center text-xs text-muted-foreground">
+                  No more images available right now.
+                </div>
+              )}
           </div>
         </div>
-      </ScrollArea>
+      )}
       <ToolSidebarClose onClick={onClose} />
     </aside>
   );
