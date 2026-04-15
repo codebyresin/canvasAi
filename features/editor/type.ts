@@ -21,6 +21,32 @@ export type ActiveTool =
   | "remove-bg"
   | "templates";
 
+export const filters = [
+  "none",
+  "polaroid",
+  "sepia",
+  "kodachrome",
+  "contrast",
+  "brightness",
+  "greyscale",
+  "brownie",
+  "vintage",
+  "technicolor",
+  "pixelate",
+  "invert",
+  "blur",
+  "sharpen",
+  "emboss",
+  "removecolor",
+  "blacknwhite",
+  "vibrance",
+  "blendcolor",
+  "huerotate",
+  "resize",
+  "saturation",
+  "gamma",
+];
+
 export const selectionDependentTools = [
   "fill",
   "font",
@@ -191,4 +217,5 @@ export interface Editor {
   changeFontWeight: (value: number) => void;
   getActiveFontWeight: () => number;
   addImage: (value: string) => void;
+  changeImageFilter: (value: string) => void;
 }

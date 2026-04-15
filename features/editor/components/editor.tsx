@@ -9,8 +9,13 @@ import { Sidebar } from "./sidebar";
 import { Toolbar } from "./toolbar";
 import { Footer } from "./footer";
 import { ActiveTool, selectionDependentTools } from "../type";
-import { OpacitySidebar } from "./opacity-sidebar";
 
+const FilterSidebar = dynamic(() =>
+  import("./filter-sidebar").then((mod) => mod.FilterSidebar),
+);
+const OpacitySidebar = dynamic(() =>
+  import("./opacity-sidebar").then((mod) => mod.OpacitySidebar),
+);
 const ShapeSidebar = dynamic(() =>
   import("./shape-sidebar").then((mod) => mod.ShapeSidebar),
 );
@@ -32,7 +37,9 @@ const FontSidebar = dynamic(() =>
 const ImageSidebar = dynamic(() =>
   import("./image-sidebar").then((mod) => mod.ImageSidebar),
 );
-
+const AiSidebbar = dynamic(() =>
+  import("./ai-sidebar").then((mod) => mod.AiSidebar),
+);
 const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
   const onChangeActiveTool = useCallback(
@@ -146,6 +153,16 @@ const Editor = () => {
           onChangeActiveTool={onChangeActiveTool}
         />
         <ImageSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <FilterSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <AiSidebbar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}

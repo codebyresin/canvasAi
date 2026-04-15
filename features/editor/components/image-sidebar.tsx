@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AlertTriangle, Loader } from "lucide-react";
 import { useCallback } from "react";
+import { useTranslations } from "next-intl";
 
 import { ActiveTool, Editor } from "@/features/editor/type";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
@@ -29,6 +30,8 @@ export const ImageSidebar = ({
   activeTool,
   onChangeActiveTool,
 }: ImageSidebarProps) => {
+  const t = useTranslations("Editor.ImageSidebar");
+
   const {
     images, // 当前已加载的所有图片数组
     isLoading, // 首次加载状态 (true/false)
@@ -67,8 +70,11 @@ export const ImageSidebar = ({
       )}
     >
       <ToolSidebarHeader
-        title="Images"
-        description={`Browse Unsplash images · ${totalLoaded}/${MAX_IMAGES}`}
+        title={t("title")}
+        description={t("description", {
+          total: totalLoaded,
+          max: MAX_IMAGES,
+        })}
       />
       <div className="p-4 border-b">
         <UploadButton
@@ -77,7 +83,7 @@ export const ImageSidebar = ({
             allowedContent: "hidden",
           }}
           content={{
-            button: "Upload Image",
+            button: t("upload"),
           }}
           endpoint="imageUploader"
           onClientUploadComplete={(res) => {
@@ -94,7 +100,7 @@ export const ImageSidebar = ({
         <div className="flex flex-col gap-y-4 items-center justify-center flex-1">
           <AlertTriangle className="size-4 text-muted-foreground" />
           <p className="text-muted-foreground text-xs">
-            Failed to fetch images
+            {t("fetchFailed")}
           </p>
         </div>
       )}
@@ -137,14 +143,13 @@ export const ImageSidebar = ({
 
             {!isFetchingNextPage && hasNextPage && !hasReachedMax && (
               <p className="text-center text-xs text-muted-foreground">
-                Continue scrolling to load more images
+                {t("loadingMore")}
               </p>
             )}
 
             {hasReachedMax && (
               <div className="rounded-md border border-dashed bg-muted/30 px-3 py-2 text-center text-xs text-muted-foreground">
-                Reached the max of {MAX_IMAGES} images. Refresh to load a new
-                set.
+                {t("maxReached", { max: MAX_IMAGES })}
               </div>
             )}
 
@@ -152,7 +157,7 @@ export const ImageSidebar = ({
               !hasNextPage &&
               images.length >= IMAGES_PER_PAGE && (
                 <div className="rounded-md border border-dashed bg-muted/30 px-3 py-2 text-center text-xs text-muted-foreground">
-                  No more images available right now.
+                  {t("noMore")}
                 </div>
               )}
           </div>
