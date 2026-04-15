@@ -55,7 +55,8 @@
       "bringForward": "上移一层",
       "sendBackwards": "下移一层",
       "opacity": "不透明度",
-      "delete": "删除"
+      "delete": "删除",
+      "filters": "滤镜"
     },
     "ShapeSidebar": {
       "title": "形状",
@@ -102,6 +103,26 @@
     },
     "Logo": {
       "alt": "AICanva 标志"
+    },
+    "AiSidebar": {
+      "title": "AI",
+      "description": "使用 AI 生成图片",
+      "placeholder": "一名宇航员在火星上骑马，高清，戏剧性光效",
+      "submit": "生成",
+      "error": "生成图片失败"
+    },
+    "ImageSidebar": {
+      "title": "图片",
+      "description": "浏览 Unsplash 图片 · {total}/{max}",
+      "upload": "上传图片",
+      "fetchFailed": "获取图片失败",
+      "loadingMore": "继续滚动加载更多图片",
+      "maxReached": "已达到最大限制 {max} 张图片。请刷新以加载新内容。",
+      "noMore": "目前没有更多图片可用。"
+    },
+    "FilterSidebar": {
+      "title": "滤镜",
+      "description": "为选中的图片应用滤镜"
     }
   }
 }

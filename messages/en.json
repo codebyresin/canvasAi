@@ -55,7 +55,8 @@
       "bringForward": "Bring forward",
       "sendBackwards": "Send backwards",
       "opacity": "Opacity",
-      "delete": "Delete"
+      "delete": "Delete",
+      "filters": "Filters"
     },
     "ShapeSidebar": {
       "title": "Shapes",
@@ -102,6 +103,26 @@
     },
     "Logo": {
       "alt": "AICanva logo"
+    },
+    "AiSidebar": {
+      "title": "AI",
+      "description": "Generate an image using AI",
+      "placeholder": "An astronaut riding a horse on mars, hd, dramatic lighting",
+      "submit": "Generate",
+      "error": "Failed to generate image"
+    },
+    "ImageSidebar": {
+      "title": "Images",
+      "description": "Browse Unsplash images · {total}/{max}",
+      "upload": "Upload Image",
+      "fetchFailed": "Failed to fetch images",
+      "loadingMore": "Continue scrolling to load more images",
+      "maxReached": "Reached the max of {max} images. Refresh to load a new set.",
+      "noMore": "No more images available right now."
+    },
+    "FilterSidebar": {
+      "title": "Filters",
+      "description": "Apply a filter to selected image"
     }
   }
 }
