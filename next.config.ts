@@ -19,6 +19,14 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "**.ufs.sh",
+      },
+      {
+        protocol: "https",
+        hostname: "**.aliyuncs.com",
+      },
+      {
+        protocol: "https",
         hostname: "replicate.delivery",
       },
     ],

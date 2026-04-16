@@ -40,6 +40,9 @@ const ImageSidebar = dynamic(() =>
 const AiSidebbar = dynamic(() =>
   import("./ai-sidebar").then((mod) => mod.AiSidebar),
 );
+const RemoveBgSidebar = dynamic(() =>
+  import("./remove-bg-sidebar").then((mod) => mod.RemoveBgSidebar),
+);
 const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
   const onChangeActiveTool = useCallback(
@@ -163,6 +166,11 @@ const Editor = () => {
           onChangeActiveTool={onChangeActiveTool}
         />
         <AiSidebbar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <RemoveBgSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
