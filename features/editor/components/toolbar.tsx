@@ -1,22 +1,26 @@
 import { useTranslations } from "next-intl";
-import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from "react-icons/fa";
 
 import { Hint } from "@/components/hint";
 import { Editor, ActiveTool, FONT_WEIGHT, FONT_SIZE } from "../type";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { TbColorFilter } from "react-icons/tb";
-import { BsBorderWidth } from "react-icons/bs";
-import { RxTransparencyGrid } from "react-icons/rx";
 import {
-  ArrowUp,
-  ArrowDown,
-  ChevronDown,
-  AlignLeft,
   AlignCenter,
+  AlignLeft,
   AlignRight,
-  Trash,
+  ArrowDown,
+  ArrowUp,
+  Bold,
+  Blend,
+  ChevronDown,
+  Copy,
+  Grid3x3,
+  Italic,
   SquareSplitHorizontal,
+  StretchHorizontal,
+  Strikethrough,
+  Trash,
+  Underline,
 } from "lucide-react";
 import { isTextType } from "../untils";
 import { useState } from "react";
@@ -192,7 +196,7 @@ export const Toolbar = ({
               variant="ghost"
               className={cn(activeTool === "stroke-width" && "bg-gray-100")}
             >
-              <BsBorderWidth className="size-4" />
+              <StretchHorizontal className="size-4" />
             </Button>
           </Hint>
         </div>
@@ -223,7 +227,7 @@ export const Toolbar = ({
               variant="ghost"
               className={cn(properties.fontWeight > 500 && "bg-gray-100")}
             >
-              <FaBold className="size-4" />
+              <Bold className="size-4" />
             </Button>
           </Hint>
         </div>
@@ -237,7 +241,7 @@ export const Toolbar = ({
               variant="ghost"
               className={cn(properties.fontStyle === "italic" && "bg-gray-100")}
             >
-              <FaItalic className="size-4" />
+              <Italic className="size-4" />
             </Button>
           </Hint>
         </div>
@@ -251,7 +255,7 @@ export const Toolbar = ({
               variant="ghost"
               className={cn(properties.fontUnderline && "bg-gray-100")}
             >
-              <FaUnderline className="size-4" />
+              <Underline className="size-4" />
             </Button>
           </Hint>
         </div>
@@ -265,7 +269,7 @@ export const Toolbar = ({
               variant="ghost"
               className={cn(properties.fontLinethrough && "bg-gray-100")}
             >
-              <FaStrikethrough className="size-4" />
+              <Strikethrough className="size-4" />
             </Button>
           </Hint>
         </div>
@@ -334,7 +338,7 @@ export const Toolbar = ({
               variant="ghost"
               className={cn(activeTool === "filter" && "bg-gray-100")}
             >
-              <TbColorFilter className="size-4" />
+              <Blend className="size-4" />
             </Button>
           </Hint>
         </div>
@@ -383,7 +387,21 @@ export const Toolbar = ({
             variant="ghost"
             className={cn(activeTool === "opacity" && "bg-gray-100")}
           >
-            <RxTransparencyGrid className="size-4" />
+            <Grid3x3 className="size-4" />
+          </Button>
+        </Hint>
+      </div>
+      <div className="flex items-center h-full justify-center">
+        <Hint label="Duplicate" side="bottom" sideOffset={5}>
+          <Button
+            onClick={() => {
+              editor?.onCopy();
+              editor?.onPaste();
+            }}
+            size="icon"
+            variant="ghost"
+          >
+            <Copy className="size-4" />
           </Button>
         </Hint>
       </div>

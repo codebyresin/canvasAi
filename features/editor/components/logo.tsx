@@ -12,6 +12,7 @@ export const Logo = () => {
       <div className="size-8 relative shrink-0">
         <Image
           priority
+          fetchPriority="high"
           src="/logo.svg"
           alt={t("alt")}
           fill

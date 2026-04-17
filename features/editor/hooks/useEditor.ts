@@ -1,6 +1,7 @@
 import { fabric } from "fabric";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAutoResize } from "./useAutoResize";
+import { useClipboard } from "./use-clipboard";
 import {
   BuildEditorProps,
   CIRCLE_OPTIONS,
@@ -31,6 +32,8 @@ const WORKSPACE_NAME = "workspace";
  * @returns
  */
 const buildEditor = ({
+  copy,
+  paste,
   canvas,
   fabric,
   fillColor,
@@ -63,6 +66,18 @@ const buildEditor = ({
   };
 
   return {
+    enableDrawingMode: () => {
+      canvas.discardActiveObject();
+      canvas.renderAll();
+      canvas.isDrawingMode = true;
+      canvas.freeDrawingBrush.width = strokeWidth;
+      canvas.freeDrawingBrush.color = strokeColor;
+    },
+    disableDrawingMode: () => {
+      canvas.isDrawingMode = false;
+    },
+    onCopy: () => copy(),
+    onPaste: () => paste(),
     changeImageFilter: (value: string) => {
       //图片过滤器
       const objects = canvas.getActiveObjects();
@@ -455,7 +470,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
-
+  //!赋值粘贴
+  const { copy, paste } = useClipboard({ canvas });
   //!canvas的发布订阅hook
   useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
   //!添加shape居中于画板
@@ -493,6 +509,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
     if (!canvas || !fabricApi) return undefined;
 
     return buildEditor({
+      copy,
+      paste,
       canvas,
       fabric,
       fillColor,
@@ -508,6 +526,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
       fontFamily,
     });
   }, [
+    copy,
+    paste,
     canvas,
     fabricApi,
     fillColor,

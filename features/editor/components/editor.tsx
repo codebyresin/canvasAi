@@ -43,23 +43,9 @@ const AiSidebbar = dynamic(() =>
 const RemoveBgSidebar = dynamic(() =>
   import("./remove-bg-sidebar").then((mod) => mod.RemoveBgSidebar),
 );
+
 const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
-  const onChangeActiveTool = useCallback(
-    (tool: ActiveTool) => {
-      if (tool === activeTool) {
-        return setActiveTool("select");
-      }
-      if (tool === "draw") {
-        //TODO
-      }
-      if (activeTool === "draw") {
-        //TODO
-      }
-      setActiveTool(tool);
-    },
-    [activeTool],
-  );
 
   const onClearSelection = useCallback(() => {
     if (selectionDependentTools.includes(activeTool)) {
@@ -70,6 +56,22 @@ const Editor = () => {
   const { init, editor } = useEditor({
     clearSelectionCallback: onClearSelection,
   });
+  const onChangeActiveTool = useCallback(
+    (tool: ActiveTool) => {
+      if (activeTool === "draw") {
+        editor?.disableDrawingMode();
+      }
+      if (tool === activeTool) {
+        return setActiveTool("select");
+      }
+      if (tool === "draw") {
+        editor?.enableDrawingMode();
+      }
+      setActiveTool(tool);
+    },
+    [activeTool, editor],
+  );
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const fabricRef = useRef<fabric.Canvas | null>(null);

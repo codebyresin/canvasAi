@@ -1,13 +1,20 @@
+"use client";
+
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { ActiveTool, Editor } from "../type";
 import { ToolSidebarHeader } from "./tool-sidebar-header";
 import { ToolSidebarClose } from "./tool-sidebar-close";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { ShapeTool } from "./shape-tool";
-import { IoTriangle } from "react-icons/io5";
-import { FaDiamond } from "react-icons/fa6";
-import { FaCircle, FaSquare, FaSquareFull } from "react-icons/fa";
+
+const ShapeSidebarPanel = dynamic(() => import("./shape-sidebar-panel"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex min-h-40 flex-1 items-center justify-center p-4 text-sm text-muted-foreground">
+      ...
+    </div>
+  ),
+});
 
 interface ShapeSidebarProps {
   editor: Editor | undefined;
@@ -46,29 +53,7 @@ export const ShapeSidebar = ({
           title={t("title")}
           description={t("description")}
         />
-        <ScrollArea className="min-h-0 flex-1">
-          <div className="grid grid-cols-3 gap-4 p-4">
-            <ShapeTool onClick={() => editor?.addCircle()} icon={FaCircle} />
-            <ShapeTool
-              onClick={() => editor?.addSoftRectangle()}
-              icon={FaSquare}
-            />
-            <ShapeTool
-              onClick={() => editor?.addRectangle()}
-              icon={FaSquareFull}
-            />
-            <ShapeTool
-              onClick={() => editor?.addTriangle()}
-              icon={IoTriangle}
-            />
-            <ShapeTool
-              onClick={() => editor?.addInverseTriangle()}
-              icon={IoTriangle}
-              iconClassName="rotate-180"
-            />
-            <ShapeTool onClick={() => editor?.addDiamond()} icon={FaDiamond} />
-          </div>
-        </ScrollArea>
+        {isOpen ? <ShapeSidebarPanel editor={editor} /> : null}
       </div>
 
       {isOpen && <ToolSidebarClose onClick={onClose} />}

@@ -81,6 +81,8 @@ export const fonts = [
   "Lucida Console",
 ];
 export type BuildEditorProps = {
+  copy: () => void;
+  paste: () => void;
   canvas: fabric.Canvas;
   fabric: FabricNamespace;
   fillColor: string;
@@ -180,6 +182,10 @@ export const TEXT_OPTIONS = {
 
 //!编辑器类型
 export interface Editor {
+  enableDrawingMode: () => void;
+  disableDrawingMode: () => void;
+  onCopy: () => void;
+  onPaste: () => void;
   delete: () => void;
   addCircle: () => void;
   addSoftRectangle: () => void;

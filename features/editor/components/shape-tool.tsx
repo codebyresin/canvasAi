@@ -1,11 +1,10 @@
-import type { IconType } from "react-icons";
 import type { LucideIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 interface ShapeToolProps {
   onClick: () => void;
-  icon: LucideIcon | IconType;
+  icon: LucideIcon;
   iconClassName?: string;
 }
 

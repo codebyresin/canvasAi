@@ -6,7 +6,9 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
 // 3. 基础配置
 const nextConfig: NextConfig = {
-  // 你的其他配置
+  experimental: {
+    optimizePackageImports: ["lucide-react"],
+  },
   images: {
     remotePatterns: [
       {

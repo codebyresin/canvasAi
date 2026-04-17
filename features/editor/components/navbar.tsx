@@ -1,8 +1,10 @@
 "use client";
-import { CiFileOn } from "react-icons/ci";
+
 import {
   ChevronDown,
+  CloudCheck,
   Download,
+  FileCode,
   MousePointerClick,
   Redo2,
   Undo2,
@@ -18,10 +20,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { BsCloudCheck } from "react-icons/bs";
 import { ActiveTool } from "../type";
 import { cn } from "@/lib/utils";
-
 interface NavbarProps {
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
@@ -48,7 +48,7 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
               }}
               className="flex items-center gap-x-2"
             >
-              <CiFileOn className="size-8" />
+              <FileCode className="size-8" />
               <div>
                 <p>{t("open")}</p>
                 <p className="text-xs text-muted-foreground">{t("openJson")}</p>
@@ -81,7 +81,7 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
         </Hint>
         <Separator orientation="vertical" className="mx-2" />
         <div className="flex items-center gap-x-2">
-          <BsCloudCheck className="size-4 text-muted-foreground" />
+          <CloudCheck className="size-4 text-muted-foreground" />
           <div className="text-xs text-muted-foreground">{t("saved")}</div>
         </div>
         <div className="flex items-center gap-x-4 ml-auto">
@@ -94,28 +94,28 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-60">
               <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => {}}>
-                <CiFileOn className="size-8" />
+                <FileCode className="size-8" />
                 <div>
                   <p>{t("json")}</p>
                   <p className="text-xs text-muted-foreground">{t("saveForLaterEditing")}</p>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => {}}>
-                <CiFileOn className="size-8" />
+                <FileCode className="size-8" />
                 <div>
                   <p>{t("png")}</p>
                   <p className="text-xs text-muted-foreground">{t("saveForLaterEditing")}</p>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => {}}>
-                <CiFileOn className="size-8" />
+                <FileCode className="size-8" />
                 <div>
                   <p>{t("jpg")}</p>
                   <p className="text-xs text-muted-foreground">{t("saveForLaterEditing")}</p>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => {}}>
-                <CiFileOn className="size-8" />
+                <FileCode className="size-8" />
                 <div>
                   <p>{t("svg")}</p>
                   <p className="text-xs text-muted-foreground">{t("saveForLaterEditing")}</p>
