@@ -1,0 +1,13 @@
+---
+description: 编辑器核心改动规则（Fabric 命令集中）
+globs: features/editor/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# 编辑器核心规则
+
+- 画布对象操作集中在 `features/editor/hooks/useEditor.ts` 的 editor 命令层。
+- 组件仅调用 editor 命令，不直接散写 Fabric 变更。
+- 修改对象属性后确认渲染调用时机（如 `canvas.renderAll()`）。
+- 涉及状态回放时检查 undo/redo 路径是否完整。
+- 新增工具能力时同步补充 getter，保证 UI 可读当前状态。

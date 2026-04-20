@@ -1,0 +1,12 @@
+---
+description: AICanva 通用工程规则
+alwaysApply: true
+---
+
+# AICanva 通用规则
+
+- 所有改动优先最小化，先保证功能正确再扩展。
+- 涉及用户可见文案时，同时更新 `messages/zh-CN.json` 和 `messages/en.json`。
+- 前端请求失败必须有可读错误提示，禁止静默失败。
+- 不在组件层堆叠复杂业务逻辑，优先下沉到 hook 或 lib。
+- 新增逻辑默认补充最小手动验证步骤。

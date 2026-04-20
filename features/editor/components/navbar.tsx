@@ -20,18 +20,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { ActiveTool } from "../type";
+import { ActiveTool, Editor } from "../type";
 import { cn } from "@/lib/utils";
 interface NavbarProps {
+  editor: Editor | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
-export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
+export const Navbar = ({
+  activeTool,
+  onChangeActiveTool,
+  editor,
+}: NavbarProps) => {
   const t = useTranslations("Editor.Navbar");
 
   return (
-    <nav className="w-full flex items-center p-4 h-17 gap-x-8 border-b lg:pl-8.5">
+    <nav className="relative z-50 flex h-17 w-full items-center gap-x-8 border-b p-4 lg:pl-8.5">
       <Logo />
       <div className="w-full h-full flex items-center gap-x-1">
         <DropdownMenu modal={false}>
@@ -70,12 +75,28 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
           </Button>
         </Hint>
         <Hint label={t("undo")} side="bottom" sideOffset={10}>
-          <Button variant="ghost" size="icon" onClick={() => {}} className="">
+          <Button
+            disabled={!editor?.canUndo()}
+            variant="ghost"
+            size="icon"
+            onClick={() => {
+              editor?.onUndo();
+            }}
+            className=""
+          >
             <Undo2 className="size-4" />
           </Button>
         </Hint>
         <Hint label={t("redo")} side="bottom" sideOffset={10}>
-          <Button variant="ghost" size="icon" onClick={() => {}} className="">
+          <Button
+            disabled={!editor?.canRedo()}
+            variant="ghost"
+            size="icon"
+            onClick={() => {
+              editor?.onRedo();
+            }}
+            className=""
+          >
             <Redo2 className="size-4" />
           </Button>
         </Hint>
@@ -93,32 +114,52 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="min-w-60">
-              <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => {}}>
+              <DropdownMenuItem
+                className="flex items-center gap-x-2"
+                onClick={() => {}}
+              >
                 <FileCode className="size-8" />
                 <div>
                   <p>{t("json")}</p>
-                  <p className="text-xs text-muted-foreground">{t("saveForLaterEditing")}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("saveForLaterEditing")}
+                  </p>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => {}}>
+              <DropdownMenuItem
+                className="flex items-center gap-x-2"
+                onClick={() => {}}
+              >
                 <FileCode className="size-8" />
                 <div>
                   <p>{t("png")}</p>
-                  <p className="text-xs text-muted-foreground">{t("saveForLaterEditing")}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("saveForLaterEditing")}
+                  </p>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => {}}>
+              <DropdownMenuItem
+                className="flex items-center gap-x-2"
+                onClick={() => {}}
+              >
                 <FileCode className="size-8" />
                 <div>
                   <p>{t("jpg")}</p>
-                  <p className="text-xs text-muted-foreground">{t("saveForLaterEditing")}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("saveForLaterEditing")}
+                  </p>
                 </div>
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-x-2" onClick={() => {}}>
+              <DropdownMenuItem
+                className="flex items-center gap-x-2"
+                onClick={() => {}}
+              >
                 <FileCode className="size-8" />
                 <div>
                   <p>{t("svg")}</p>
-                  <p className="text-xs text-muted-foreground">{t("saveForLaterEditing")}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {t("saveForLaterEditing")}
+                  </p>
                 </div>
               </DropdownMenuItem>
             </DropdownMenuContent>

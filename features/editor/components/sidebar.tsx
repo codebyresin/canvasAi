@@ -60,7 +60,7 @@ export const Sidebar = ({ activeTool, onChangeActiveTool }: SidebarProps) => {
   ] as const;
 
   return (
-    <aside className="bg-white flex flex-col w-25 h-full border-r overflow-y-auto">
+    <aside className="relative z-50 flex h-full w-14 shrink-0 flex-col overflow-y-auto border-r bg-white pb-[env(safe-area-inset-bottom)] md:w-25">
       <ul className="flex flex-col">
         {sideItemOptions.map((item) => {
           return (

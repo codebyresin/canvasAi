@@ -3,8 +3,8 @@ import { ActiveTool, Editor, filters } from "@/features/editor/type";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
 import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-header";
 
-import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { editorToolAsideClasses } from "@/features/editor/editor-tool-aside";
 import { Button } from "@/components/ui/button";
 
 interface FilterSidebarProps {
@@ -24,13 +24,9 @@ export const FilterSidebar = ({
     onChangeActiveTool("select");
   };
 
+  const isOpen = activeTool === "filter";
   return (
-    <aside
-      className={cn(
-        "bg-white relative border-r z-[40] w-[360px] h-full flex flex-col",
-        activeTool === "filter" ? "visible" : "hidden",
-      )}
-    >
+    <aside className={editorToolAsideClasses(isOpen)}>
       <ToolSidebarHeader
         title={t("title")}
         description={t("description")}
@@ -50,7 +46,7 @@ export const FilterSidebar = ({
           ))}
         </div>
       </ScrollArea>
-      <ToolSidebarClose onClick={onClose} />
+      {isOpen && <ToolSidebarClose onClick={onClose} />}
     </aside>
   );
 };

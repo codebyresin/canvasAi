@@ -9,6 +9,7 @@ import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-hea
 
 import { useRemoveBg } from "@/features/ai/api/use-remove-bg";
 
+import { editorToolAsideClasses } from "@/features/editor/editor-tool-aside";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -64,13 +65,9 @@ export const RemoveBgSidebar = ({
     );
   };
 
+  const isOpen = activeTool === "remove-bg";
   return (
-    <aside
-      className={cn(
-        "bg-white relative border-r z-[40] w-[360px] h-full flex flex-col",
-        activeTool === "remove-bg" ? "visible" : "hidden",
-      )}
-    >
+    <aside className={editorToolAsideClasses(isOpen)}>
       <ToolSidebarHeader
         title="Background removal"
         description="Remove background from image using AI"
@@ -104,7 +101,7 @@ export const RemoveBgSidebar = ({
           </div>
         </ScrollArea>
       )}
-      <ToolSidebarClose onClick={onClose} />
+      {isOpen && <ToolSidebarClose onClick={onClose} />}
     </aside>
   );
 };

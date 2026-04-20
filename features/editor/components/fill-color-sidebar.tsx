@@ -1,10 +1,10 @@
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
-import { cn } from "@/lib/utils";
 import { ActiveTool, Editor, FILL_COLOR } from "../type";
 import { ToolSidebarHeader } from "./tool-sidebar-header";
 import { ToolSidebarClose } from "./tool-sidebar-close";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { editorToolAsideClasses } from "../editor-tool-aside";
 
 const ColorPicker = dynamic(() =>
   import("./color-pick").then((mod) => mod.ColorPicker),
@@ -29,13 +29,9 @@ export const FillColorSidebar = ({
   const onChange = (value: string) => {
     editor?.changeFillColor(value);
   };
+  const isOpen = activeTool === "fill";
   return (
-    <aside
-      className={cn(
-        "bg-white relative border-r z-[40] w-[360px] h-full flex flex-col",
-        activeTool === "fill" ? "visible" : "hidden",
-      )}
-    >
+    <aside className={editorToolAsideClasses(isOpen)}>
       <ToolSidebarHeader
         title={t("title")}
         description={t("description")}
@@ -46,7 +42,7 @@ export const FillColorSidebar = ({
           <ColorPicker value={value} onChange={onChange} />
         </div>
       </ScrollArea>
-      <ToolSidebarClose onClick={onClose} />
+      {isOpen && <ToolSidebarClose onClick={onClose} />}
     </aside>
   );
 };

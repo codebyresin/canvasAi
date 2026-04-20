@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Label } from "@/components/ui/label";
+import { editorToolAsideClasses } from "@/features/editor/editor-tool-aside";
 
 interface StrokeWidthSidebarProps {
   editor: Editor | undefined;
@@ -40,13 +41,9 @@ export const StrokeWidthSidebar = ({
     editor?.changeStrokeDashArray(value);
   };
 
+  const isOpen = activeTool === "stroke-width";
   return (
-    <aside
-      className={cn(
-        "bg-white relative border-r z-[40] w-[360px] h-full flex flex-col",
-        activeTool === "stroke-width" ? "visible" : "hidden",
-      )}
-    >
+    <aside className={editorToolAsideClasses(isOpen)}>
       <ToolSidebarHeader
         title={t("title")}
         description={t("description")}
@@ -92,7 +89,7 @@ export const StrokeWidthSidebar = ({
           </Button>
         </div>
       </ScrollArea>
-      <ToolSidebarClose onClick={onClose} />
+      {isOpen && <ToolSidebarClose onClick={onClose} />}
     </aside>
   );
 };

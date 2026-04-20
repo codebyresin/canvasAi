@@ -9,6 +9,7 @@ import { Sidebar } from "./sidebar";
 import { Toolbar } from "./toolbar";
 import { Footer } from "./footer";
 import { ActiveTool, selectionDependentTools } from "../type";
+import { SettingsSidebar } from "./settings-sidebar";
 
 const FilterSidebar = dynamic(() =>
   import("./filter-sidebar").then((mod) => mod.FilterSidebar),
@@ -44,6 +45,9 @@ const RemoveBgSidebar = dynamic(() =>
   import("./remove-bg-sidebar").then((mod) => mod.RemoveBgSidebar),
 );
 
+const DrawSidebar = dynamic(() =>
+  import("./draw-sidebar").then((mod) => mod.DrawSidebar),
+);
 const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>("select");
 
@@ -116,8 +120,12 @@ const Editor = () => {
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden">
-      <Navbar activeTool={activeTool} onChangeActiveTool={onChangeActiveTool} />
-      <div className="flex min-h-0 flex-1">
+      <Navbar
+        editor={editor}
+        activeTool={activeTool}
+        onChangeActiveTool={onChangeActiveTool}
+      />
+      <div className="relative flex min-h-0 flex-1">
         <Sidebar
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
@@ -177,12 +185,21 @@ const Editor = () => {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
-        <main className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-muted">
+        <DrawSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <SettingsSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <main className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-muted">
           <Toolbar
             editor={editor}
             activeTool={activeTool}
             onChangeActiveTool={onChangeActiveTool}
-            key={JSON.stringify(editor?.canvas.getActiveObject())}
           />
           <div
             className="relative min-h-0 flex-1 overflow-hidden bg-muted"

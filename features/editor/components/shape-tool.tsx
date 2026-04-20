@@ -7,7 +7,6 @@ interface ShapeToolProps {
   icon: LucideIcon;
   iconClassName?: string;
 }
-
 export const ShapeTool = ({
   onClick,
   icon: Icon,

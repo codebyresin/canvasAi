@@ -1,0 +1,13 @@
+---
+description: 客户端数据请求与国际化文案规则
+globs: "{features/**/*.{ts,tsx},messages/*.json,lib/*.ts}"
+alwaysApply: false
+---
+
+# 客户端数据与国际化规则
+
+- 前端接口调用优先使用 typed client，错误分支显式处理 `response.ok`。
+- React Query 的异步状态需覆盖 `isPending`、`isError`、`onSuccess`。
+- 新增用户可见文案时，禁止硬编码在组件中，优先写入 `messages/*.json`。
+- 中文和英文 key 必须对齐，避免单语缺失。
+- 变更分页/加载逻辑时，确保“无更多数据”和“达到上限”文案可区分。

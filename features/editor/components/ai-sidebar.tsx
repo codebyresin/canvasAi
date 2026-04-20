@@ -9,8 +9,8 @@ import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-hea
 
 import { useGenerateImage } from "@/features/ai/api/use-generate-image";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { editorToolAsideClasses } from "@/features/editor/editor-tool-aside";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -53,16 +53,12 @@ export const AiSidebar = ({
     onChangeActiveTool("select");
   };
 
+  const isOpen = activeTool === "ai";
   return (
-    <aside
-      className={cn(
-        "bg-white relative border-r z-[40] w-[360px] h-full flex flex-col",
-        activeTool === "ai" ? "visible" : "hidden",
-      )}
-    >
+    <aside className={editorToolAsideClasses(isOpen)}>
       <ToolSidebarHeader title={t("title")} description={t("description")} />
-      <ScrollArea>
-        <form onSubmit={onSubmit} className="p-4 space-y-6">
+      <ScrollArea className="min-h-0 flex-1">
+        <form onSubmit={onSubmit} className="space-y-6 p-4">
           <Textarea
             disabled={mutation.isPending}
             placeholder={t("placeholder")}
@@ -82,7 +78,7 @@ export const AiSidebar = ({
           </Button>
         </form>
       </ScrollArea>
-      <ToolSidebarClose onClick={onClose} />
+      {isOpen && <ToolSidebarClose onClick={onClose} />}
     </aside>
   );
 };

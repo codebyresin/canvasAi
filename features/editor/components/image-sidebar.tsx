@@ -16,7 +16,7 @@ import {
 } from "@/features/images/constants";
 import { useLoadMoreOnScroll } from "@/features/images/hooks/use-load-more-on-scroll";
 
-import { cn } from "@/lib/utils";
+import { editorToolAsideClasses } from "@/features/editor/editor-tool-aside";
 import { UploadButton } from "@/lib/uploadthing";
 
 interface ImageSidebarProps {
@@ -33,14 +33,14 @@ export const ImageSidebar = ({
   const t = useTranslations("Editor.ImageSidebar");
 
   const {
-    images, // 当前已加载的所有图片数组
-    isLoading, // 首次加载状态 (true/false)
-    isError, // 是否出错
-    hasNextPage, // 是否还有下一页数据
-    isFetchingNextPage, // 是否正在加载下一页
-    fetchNextPage, // 触发加载下一页的函数
-    totalLoaded, // 已加载图片总数
-    hasReachedMax, // 是否已达到最大加载限制
+    images,
+    isLoading,
+    isError,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+    totalLoaded,
+    hasReachedMax,
   } = useInfiniteImages();
 
   const onClose = () => {
@@ -62,13 +62,9 @@ export const ImageSidebar = ({
     threshold: LOAD_MORE_THRESHOLD,
   });
 
+  const isOpen = activeTool === "images";
   return (
-    <aside
-      className={cn(
-        "bg-white relative border-r z-[40] w-[360px] h-full flex flex-col",
-        activeTool === "images" ? "visible" : "hidden",
-      )}
-    >
+    <aside className={editorToolAsideClasses(isOpen)}>
       <ToolSidebarHeader
         title={t("title")}
         description={t("description", {
@@ -163,7 +159,7 @@ export const ImageSidebar = ({
           </div>
         </div>
       )}
-      <ToolSidebarClose onClick={onClose} />
+      {isOpen && <ToolSidebarClose onClick={onClose} />}
     </aside>
   );
 };

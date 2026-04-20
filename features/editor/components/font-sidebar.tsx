@@ -3,8 +3,9 @@ import { ActiveTool, Editor, fonts } from "@/features/editor/type";
 import { ToolSidebarClose } from "@/features/editor/components/tool-sidebar-close";
 import { ToolSidebarHeader } from "@/features/editor/components/tool-sidebar-header";
 
-import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { editorToolAsideClasses } from "@/features/editor/editor-tool-aside";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 interface FontSidebarProps {
@@ -25,13 +26,9 @@ export const FontSidebar = ({
     onChangeActiveTool("select");
   };
 
+  const isOpen = activeTool === "font";
   return (
-    <aside
-      className={cn(
-        "bg-white relative border-r z-[40] w-[360px] h-full flex flex-col",
-        activeTool === "font" ? "visible" : "hidden",
-      )}
-    >
+    <aside className={editorToolAsideClasses(isOpen)}>
       <ToolSidebarHeader title={t("title")} description={t("description")} />
       <ScrollArea className="min-h-0 flex-1">
         <div className="p-4 space-y-1 border-b">
@@ -56,7 +53,7 @@ export const FontSidebar = ({
           ))}
         </div>
       </ScrollArea>
-      <ToolSidebarClose onClick={onClose} />
+      {isOpen && <ToolSidebarClose onClick={onClose} />}
     </aside>
   );
 };

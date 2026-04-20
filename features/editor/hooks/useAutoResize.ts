@@ -27,6 +27,26 @@ export const useAutoResize = ({ canvas, container }: UseAutoResizeProps) => {
 
     canvas.setDimensions({ width, height });
 
+    const narrow =
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 767px)").matches;
+
+    if (narrow) {
+      canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+      canvas.setZoom(1);
+      const workspaceCenter = workspace.getCenterPoint();
+      const vpt = canvas.viewportTransform;
+      if (!vpt) return;
+      vpt[4] = width / 2 - workspaceCenter.x;
+      vpt[5] = height / 2 - workspaceCenter.y;
+      canvas.setViewportTransform(vpt);
+      workspace.clone((cloned: fabric.Rect) => {
+        canvas.clipPath = cloned;
+        canvas.requestRenderAll();
+      });
+      return;
+    }
+
     const zoomRatio = 0.85;
     // @ts-expect-error fabric util typing is incomplete
     const scale = fabric.util.findScaleToFit(workspace, { width, height });
@@ -77,8 +97,17 @@ export const useAutoResize = ({ canvas, container }: UseAutoResizeProps) => {
 
     resizeObserver.observe(container);
 
+    const mq = window.matchMedia("(max-width: 767px)");
+    const onBreakpoint = () => {
+      lastSizeRef.current = { width: 0, height: 0 };
+      autoZoom();
+    };
+    mq.addEventListener("change", onBreakpoint);
+
     return () => {
       resizeObserver.disconnect();
+      mq.removeEventListener("change", onBreakpoint);
     };
   }, [autoZoom, canvas, container]);
+  return { autoZoom };
 };

@@ -4,6 +4,17 @@ import { ITextboxOptions } from "fabric/fabric-impl";
 
 export type FabricNamespace = typeof import("fabric").fabric;
 
+export const JSON_KEYS = [
+  "name",
+  "gradientAngle",
+  "selectable",
+  "hasControls",
+  "linkData",
+  "editable",
+  "extensionType",
+  "extension",
+];
+
 export type ActiveTool =
   | "select"
   | "shapes"
@@ -81,6 +92,12 @@ export const fonts = [
   "Lucida Console",
 ];
 export type BuildEditorProps = {
+  undo: () => void;
+  redo: () => void;
+  save: (skip?: boolean) => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
+  autoZoom: () => void;
   copy: () => void;
   paste: () => void;
   canvas: fabric.Canvas;
@@ -182,6 +199,14 @@ export const TEXT_OPTIONS = {
 
 //!编辑器类型
 export interface Editor {
+  onUndo: () => void;
+  onRedo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
+  getWorkspace: () => fabric.Object | undefined;
+  autoZoom: () => void;
+  changeBackground: (value: string) => void;
+  changeSize: (value: { width: number; height: number }) => void;
   enableDrawingMode: () => void;
   disableDrawingMode: () => void;
   onCopy: () => void;

@@ -6,12 +6,17 @@ import { cn } from "@/lib/utils";
 import { ActiveTool, Editor } from "../type";
 import { ToolSidebarHeader } from "./tool-sidebar-header";
 import { ToolSidebarClose } from "./tool-sidebar-close";
+import { editorToolAsideClasses } from "../editor-tool-aside";
 
 const ShapeSidebarPanel = dynamic(() => import("./shape-sidebar-panel"), {
   ssr: false,
   loading: () => (
-    <div className="flex min-h-40 flex-1 items-center justify-center p-4 text-sm text-muted-foreground">
-      ...
+    <div className="flex min-h-40 flex-1 items-center justify-center p-4">
+      <div className="flex items-center gap-2">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-muted-foreground" />
+        <span className="h-2 w-2 animate-pulse rounded-full bg-muted-foreground [animation-delay:120ms]" />
+        <span className="h-2 w-2 animate-pulse rounded-full bg-muted-foreground [animation-delay:240ms]" />
+      </div>
     </div>
   ),
 });
@@ -37,16 +42,14 @@ export const ShapeSidebar = ({
   return (
     <aside
       className={cn(
-        "relative z-10 h-full transition-[width,opacity,transform] duration-300 ease-out overflow-visible",
-        isOpen
-          ? "visible w-90 translate-x-0 opacity-100"
-          : "pointer-events-none invisible w-0 -translate-x-4 opacity-0",
+        editorToolAsideClasses(isOpen),
+        "max-md:overflow-hidden md:overflow-visible",
       )}
     >
       <div
         className={cn(
-          "relative flex h-full w-90 flex-col overflow-hidden border-r bg-white transition-transform duration-300 ease-out",
-          isOpen ? "translate-x-0" : "-translate-x-4",
+          "relative flex h-full w-full flex-col overflow-hidden border-r bg-white transition-transform duration-300 ease-out md:w-90",
+          isOpen ? "translate-x-0" : "md:-translate-x-4",
         )}
       >
         <ToolSidebarHeader

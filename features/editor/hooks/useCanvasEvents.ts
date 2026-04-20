@@ -2,24 +2,27 @@ import { fabric } from "fabric";
 import { useEffect } from "react";
 
 interface UseCanvasEventsProps {
+  save: () => void;
   canvas: fabric.Canvas | null;
   setSelectedObjects: (objects: fabric.Object[]) => void;
   clearSelectionCallback?: () => void;
 }
 
 export const useCanvasEvents = ({
+  save,
   canvas,
   setSelectedObjects,
   clearSelectionCallback,
 }: UseCanvasEventsProps) => {
   useEffect(() => {
     if (canvas) {
+      canvas.on("object:added", () => save());
+      canvas.on("object:removed", () => save());
+      canvas.on("object:modified", () => save());
       canvas.on("selection:created", (e) => {
         setSelectedObjects(e.selected || []);
       });
       canvas.on("selection:updated", (e) => {
-        console.log(e);
-
         setSelectedObjects(e.selected || []);
       });
       canvas.on("selection:cleared", () => {
@@ -39,6 +42,7 @@ export const useCanvasEvents = ({
       }
     };
   }, [
+    save,
     canvas,
     setSelectedObjects, // No need for this, this is from setState
     clearSelectionCallback,

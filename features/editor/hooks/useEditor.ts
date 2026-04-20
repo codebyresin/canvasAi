@@ -19,9 +19,13 @@ import {
   FONT_FAMILY,
   FONT_SIZE,
   FONT_WEIGHT,
+  JSON_KEYS,
 } from "../type";
 import { useCanvasEvents } from "./useCanvasEvents";
 import { createFilter, isTextType } from "../untils";
+import { ZodAny } from "zod";
+import { useHistory } from "./useHistory";
+import { useHotkeys } from "./use-hotkeys";
 
 const WORKSPACE_NAME = "workspace";
 
@@ -32,6 +36,12 @@ const WORKSPACE_NAME = "workspace";
  * @returns
  */
 const buildEditor = ({
+  save,
+  undo,
+  redo,
+  canRedo,
+  canUndo,
+  autoZoom,
   copy,
   paste,
   canvas,
@@ -66,6 +76,25 @@ const buildEditor = ({
   };
 
   return {
+    canUndo,
+    canRedo,
+    onUndo: () => undo(),
+    onRedo: () => redo(),
+    getWorkspace,
+    changeSize: (value: { width: number; height: number }) => {
+      const workspace = getWorkspace();
+
+      workspace?.set(value);
+      autoZoom();
+      save();
+    },
+    changeBackground: (value: string) => {
+      const workspace = getWorkspace();
+      workspace?.set({ fill: value });
+      canvas.renderAll();
+      save();
+    },
+    autoZoom,
     enableDrawingMode: () => {
       canvas.discardActiveObject();
       canvas.renderAll();
@@ -151,8 +180,6 @@ const buildEditor = ({
     },
     changeFontFamily: (value: string) => {
       setFontFamily(value);
-      console.log(canvas.getActiveObjects());
-
       canvas.getActiveObjects().forEach((object) => {
         if (isTextType(object.type)) {
           // @ts-ignore
@@ -257,12 +284,13 @@ const buildEditor = ({
       );
       addToCanvas(object);
     },
-    addText: (value, option) => {
+    addText: (value, options) => {
       const object = new fabric.Textbox(value, {
         ...TEXT_OPTIONS,
         fill: fillColor,
-        ...option,
+        ...options,
       });
+
       addToCanvas(object);
     },
     canvas,
@@ -470,19 +498,32 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
+
+  //!保存钩子
+  const { save, canRedo, canUndo, undo, redo, canvasHistory, setHistoryIndex } =
+    useHistory({
+      canvas,
+    });
   //!赋值粘贴
   const { copy, paste } = useClipboard({ canvas });
   //!canvas的发布订阅hook
-  useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
+  useCanvasEvents({ save, canvas, setSelectedObjects, clearSelectionCallback });
+  useHotkeys({
+    undo,
+    redo,
+    copy,
+    paste,
+    save,
+    canvas,
+  });
   //!添加shape居中于画板
-  useAutoResize({
+  const { autoZoom } = useAutoResize({
     canvas,
     container,
   });
 
   useEffect(() => {
     const activeObject = selectedObjects[0];
-    console.log(activeObject);
 
     if (!activeObject) {
       setFillColor(FILL_COLOR);
@@ -501,7 +542,7 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
     // Faulty TS library, fontFamily exists.
     const nextFont = activeObject.get("fontFamily");
     if (typeof nextFont === "string") {
-      setStrokeColor(nextFont);
+      setFontFamily(nextFont);
     }
   }, [selectedObjects]);
 
@@ -509,6 +550,12 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
     if (!canvas || !fabricApi) return undefined;
 
     return buildEditor({
+      save,
+      undo,
+      redo,
+      canUndo,
+      canRedo,
+      autoZoom,
       copy,
       paste,
       canvas,
@@ -526,6 +573,12 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
       fontFamily,
     });
   }, [
+    canRedo,
+    canUndo,
+    undo,
+    redo,
+    save,
+    autoZoom,
     copy,
     paste,
     canvas,
@@ -586,9 +639,15 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
 
       setCanvas(initialCanvas);
       setContainer(initialContainer);
+      const currentState = JSON.stringify(initialCanvas.toJSON(JSON_KEYS));
+      canvasHistory.current = [currentState];
+      setHistoryIndex(0);
       setFabricApi(initialFabric);
     },
-    [],
+    [
+      canvasHistory, // No need, this is from useRef
+      setHistoryIndex, // No need, this is from useState
+    ],
   );
 
   return { init, editor };
