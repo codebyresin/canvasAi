@@ -123,6 +123,13 @@
     "FilterSidebar": {
       "title": "滤镜",
       "description": "为选中的图片应用滤镜"
+    },
+    "RemoveBgSidebar": {
+      "title": "背景移除",
+      "description": "使用 AI 移除图片背景",
+      "unsupportedObject": "当前对象不支持此功能",
+      "imageAlt": "待处理图片",
+      "submit": "移除背景"
     }
   }
 }

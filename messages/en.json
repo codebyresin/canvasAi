@@ -123,6 +123,13 @@
     "FilterSidebar": {
       "title": "Filters",
       "description": "Apply a filter to selected image"
+    },
+    "RemoveBgSidebar": {
+      "title": "Background removal",
+      "description": "Remove background from image using AI",
+      "unsupportedObject": "Feature not available for this object",
+      "imageAlt": "Selected image",
+      "submit": "Remove background"
     }
   }
 }
