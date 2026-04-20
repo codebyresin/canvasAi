@@ -22,10 +22,16 @@ import {
   JSON_KEYS,
 } from "../type";
 import { useCanvasEvents } from "./useCanvasEvents";
-import { createFilter, isTextType } from "../untils";
+import {
+  createFilter,
+  downloadFile,
+  isTextType,
+  transformText,
+} from "../untils";
 import { ZodAny } from "zod";
 import { useHistory } from "./useHistory";
 import { useHotkeys } from "./use-hotkeys";
+import { useWindowEvents } from "./use-window-events";
 
 const WORKSPACE_NAME = "workspace";
 
@@ -62,6 +68,63 @@ const buildEditor = ({
     return canvas.getObjects().find((object) => object.name === WORKSPACE_NAME);
   };
 
+  const generateSaveOptions = () => {
+    const { width, height, left, top } = getWorkspace() as fabric.Rect;
+
+    return {
+      name: "Image",
+      format: "png",
+      quality: 1,
+      width,
+      height,
+      left,
+      top,
+    };
+  };
+  const savePng = () => {
+    const options = generateSaveOptions();
+
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+
+    downloadFile(dataUrl, "png");
+    autoZoom();
+  };
+  const saveSvg = () => {
+    const options = generateSaveOptions();
+
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+
+    downloadFile(dataUrl, "svg");
+    autoZoom();
+  };
+  const saveJpg = () => {
+    const options = generateSaveOptions();
+
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+
+    downloadFile(dataUrl, "jpg");
+    autoZoom();
+  };
+  const saveJson = async () => {
+    const dataUrl = canvas.toJSON(JSON_KEYS);
+
+    await transformText(dataUrl.objects);
+    const fileString = `data:text/json;charset=utf-8,${encodeURIComponent(
+      JSON.stringify(dataUrl, null, "\t"),
+    )}`;
+    downloadFile(fileString, "json");
+  };
+  const loadJson = (json: string) => {
+    const data = JSON.parse(json);
+
+    canvas.loadFromJSON(data, () => {
+      autoZoom();
+    });
+  };
+
   const center = (obj: fabric.Object) => {
     const workspace = getWorkspace();
     const center = workspace?.getCenterPoint();
@@ -76,6 +139,11 @@ const buildEditor = ({
   };
 
   return {
+    savePng,
+    saveJpg,
+    saveSvg,
+    saveJson,
+    loadJson,
     canUndo,
     canRedo,
     onUndo: () => undo(),
@@ -498,7 +566,8 @@ export const useEditor = ({ clearSelectionCallback }: EditorHookProps) => {
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
-
+  //!未保存提示
+  useWindowEvents();
   //!保存钩子
   const { save, canRedo, canUndo, undo, redo, canvasHistory, setHistoryIndex } =
     useHistory({

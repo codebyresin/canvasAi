@@ -199,6 +199,11 @@ export const TEXT_OPTIONS = {
 
 //!编辑器类型
 export interface Editor {
+  savePng: () => void;
+  saveJpg: () => void;
+  saveSvg: () => void;
+  saveJson: () => void;
+  loadJson: (json: string) => void;
   onUndo: () => void;
   onRedo: () => void;
   canUndo: () => boolean;

@@ -9,6 +9,7 @@ import {
   Redo2,
   Undo2,
 } from "lucide-react";
+import { useFilePicker } from "use-file-picker";
 import { useTranslations } from "next-intl";
 import { Hint } from "@/components/hint";
 import { Logo } from "./logo";
@@ -35,6 +36,20 @@ export const Navbar = ({
 }: NavbarProps) => {
   const t = useTranslations("Editor.Navbar");
 
+  const { openFilePicker } = useFilePicker({
+    accept: ".json",
+    onFilesSuccessfullySelected: ({ plainFiles }: any) => {
+      if (plainFiles && plainFiles.length > 0) {
+        const file = plainFiles[0];
+        const reader = new FileReader();
+        reader.readAsText(file, "UTF-8");
+        reader.onload = () => {
+          editor?.loadJson(reader.result as string);
+        };
+      }
+    },
+  });
+
   return (
     <nav className="relative z-50 flex h-17 w-full items-center gap-x-8 border-b p-4 lg:pl-8.5">
       <Logo />
@@ -49,7 +64,7 @@ export const Navbar = ({
           <DropdownMenuContent align="start" className="min-w-60">
             <DropdownMenuItem
               onClick={() => {
-                console.log("wait to do");
+                openFilePicker();
               }}
               className="flex items-center gap-x-2"
             >
@@ -116,7 +131,9 @@ export const Navbar = ({
             <DropdownMenuContent align="end" className="min-w-60">
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => {
+                  editor?.saveJson();
+                }}
               >
                 <FileCode className="size-8" />
                 <div>
@@ -128,7 +145,9 @@ export const Navbar = ({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => {
+                  editor?.savePng();
+                }}
               >
                 <FileCode className="size-8" />
                 <div>
@@ -140,7 +159,9 @@ export const Navbar = ({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => {
+                  editor?.saveJpg();
+                }}
               >
                 <FileCode className="size-8" />
                 <div>
@@ -152,7 +173,9 @@ export const Navbar = ({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex items-center gap-x-2"
-                onClick={() => {}}
+                onClick={() => {
+                  editor?.saveSvg();
+                }}
               >
                 <FileCode className="size-8" />
                 <div>

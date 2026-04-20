@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { AlertTriangle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // import { usePaywall } from "@/features/subscriptions/hooks/use-paywall";
 
@@ -34,6 +35,7 @@ export const RemoveBgSidebar = ({
 }: RemoveBgSidebarProps) => {
   // const { shouldBlock, triggerPaywall } = usePaywall();
   const mutation = useRemoveBg();
+  const t = useTranslations("Editor.RemoveBgSidebar");
 
   const selectedObject = editor?.selectedObjects[0];
 
@@ -69,14 +71,14 @@ export const RemoveBgSidebar = ({
   return (
     <aside className={editorToolAsideClasses(isOpen)}>
       <ToolSidebarHeader
-        title="Background removal"
-        description="Remove background from image using AI"
+        title={t("title")}
+        description={t("description")}
       />
       {!imageSrc && (
         <div className="flex flex-col gap-y-4 items-center justify-center flex-1">
           <AlertTriangle className="size-4 text-muted-foreground" />
           <p className="text-muted-foreground text-xs">
-            Feature not available for this object
+            {t("unsupportedObject")}
           </p>
         </div>
       )}
@@ -89,14 +91,14 @@ export const RemoveBgSidebar = ({
                 mutation.isPending && "opacity-50",
               )}
             >
-              <Image src={imageSrc} fill alt="Image" className="object-cover" />
+              <Image src={imageSrc} fill alt={t("imageAlt")} className="object-cover" />
             </div>
             <Button
               disabled={mutation.isPending}
               onClick={onClick}
               className="w-full"
             >
-              Remove background
+              {t("submit")}
             </Button>
           </div>
         </ScrollArea>
